@@ -1,5 +1,5 @@
 package org.unq.compiler.remolacha.grammar;
 
-abstract class Expression {
+public abstract class Expression {
 
 }
