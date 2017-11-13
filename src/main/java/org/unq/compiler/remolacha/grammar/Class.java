@@ -15,6 +15,9 @@ public class Class {
         this.methods = methods;
     }
 
+    public Class(String id) {
+        this.id = id;
+    }
 
     public String getId() {
         return id;
@@ -38,5 +41,13 @@ public class Class {
 
     public void setMethods(List<Method> methods) {
         this.methods = methods;
+    }
+
+    public void addMethod (Method m){
+        this.methods.add(m);
+    }
+
+    public void addLocalVar(LocalVar lv){
+        this.locals.add(lv);
     }
 }

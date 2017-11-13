@@ -20,6 +20,13 @@ public class Send extends Expression {
         this.arguments = arguments;
     }
 
+
+    /*Send puede no tener argumentos*/
+    public Send(Expression expr, String ID) {
+        this.expr = expr;
+        this.ID = ID;
+    }
+
     public Expression getExpr() {
         return expr;
     }
