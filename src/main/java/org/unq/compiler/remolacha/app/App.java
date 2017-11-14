@@ -16,7 +16,16 @@ public class App {
         Class main =  new Class("Main");
         Self self = new Self();
 
+
+        /*Variables de contador*/
+        List<LocalVar> contadorLocals = new ArrayList<LocalVar>();
+        Variable e  = new Variable("valor");
+        LocalVar valor = new LocalVar("valor", e);
+        contadorLocals.add(valor);
+        contador.setLocals(contadorLocals);
+
         /*Métodos de Contador*/
+
         /*Inicializar*/
         Method inicializar = new Method("inicializar");
         /*Parámetros de inicializar*/
@@ -55,7 +64,19 @@ public class App {
         List<Expression> blockIncrementarEn = new ArrayList<>();
          /*Parámetros de incrementarEn*/
         List<String> parametersIncrementarEn = new ArrayList<>();
+        parametersIncrementarEn.add("x");
+        incrementarEn.setParameters(parametersIncrementarEn);
+        /*Expresiones del bloque de incrementarEn*/
+        Variable e6 = new Variable("valor");
+        List<Expression> lArg = new ArrayList<>();
+        Variable e7 = new Variable("x");
+        lArg.add(e7);
+        Send e4 = new Send(e6, "add", lArg) ;
+        Set e5 = new Set("valor", e4);
+        blockIncrementarEn.add(e5);
+        incrementarEn.setBlock(blockIncrementarEn);
 
+        contador.addMethod(incrementarEn);
 
 
 
