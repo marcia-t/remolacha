@@ -10,6 +10,10 @@ public class LocalVar {
         this.e = e;
     }
 
+    public LocalVar(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

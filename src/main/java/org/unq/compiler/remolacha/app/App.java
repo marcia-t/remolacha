@@ -1,4 +1,5 @@
 package org.unq.compiler.remolacha.app;
+import org.unq.compiler.remolacha.compiler.CodeHelper;
 import org.unq.compiler.remolacha.grammar.*;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.expressions.*;
@@ -19,8 +20,7 @@ public class App {
 
         /*Variables de contador*/
         List<LocalVar> contadorLocals = new ArrayList<LocalVar>();
-        Variable e  = new Variable("valor");
-        LocalVar valor = new LocalVar("valor", e);
+        LocalVar valor = new LocalVar("valor");
         contadorLocals.add(valor);
         contador.setLocals(contadorLocals);
 
@@ -80,8 +80,74 @@ public class App {
 
 
 
-
+        /*valorActual*/
         Method valorActual = new Method("valorActual");
+        /*Bloque de valorActual*/
+        List<Expression> blockValorActual = new ArrayList<>();
+        Variable e8 = new Variable("valor");
+        blockValorActual.add(e8);
+        valorActual.setBlock(blockValorActual);
+
+        contador.addMethod(valorActual);
+
+
+        /*Variables de main*/
+        List<LocalVar> mainLocals = new ArrayList<LocalVar>();
+        LocalVar c = new LocalVar("c");
+
+        main.addLocalVar(c);
+
+        /*Métodos de main*/
+        Method mainM = new Method("main");
+
+        /*Bloque de main*/
+        List<Expression> blockMain = new ArrayList<>();
+        /*Expresiones de línea 1*/
+        /*set c = new Contador . inicializar (0)*/
+        Expression e10 = new New("Contador");
+        List<Expression> e12 = new ArrayList<>();
+        ConstantNumber e13 = new ConstantNumber(0);
+        e12.add(e13);
+        Expression e11 = new Send (e10, "inicializar", e12);
+        Set e9 = new Set ("c", e11);
+
+        blockMain.add(e9);
+
+        /*Expresiones línea 2*/
+        /*c . incrementar (). valorActual (). print ()*/
+        Variable c2 = new Variable("c");
+        Send e14 =  new Send(c2, "incrementar");
+        Send e15 = new Send(e14, "valorActual");
+        Send e16 = new Send(e15, "print");
+
+        blockMain.add(e16);
+
+        /*Expresiones línea 3*/
+        /*c . incrementar (). valorActual (). print ()*/
+        Variable c3 = new Variable("c");
+        Send e17 =  new Send(c3, "incrementar");
+        Send e18 = new Send(e17, "valorActual");
+        Send e19 = new Send(e18, "print");
+
+        blockMain.add(e19);
+        /*Expresiones línea 4*/
+        /*c . incrementarEn (10). valorActual (). print ()*/
+        ConstantNumber n2 = new ConstantNumber(10);
+
+        List<Expression> lArg2 = new ArrayList<>();
+        lArg2.add(n2);
+        Send e20 =  new Send(c2, "incrementarEn", lArg2);
+        Send e21 = new Send(e20, "valorActual");
+        Send e22 = new Send(e21, "print");
+
+        blockMain.add(e22);
+        mainM.setBlock(blockMain);
+        main.addMethod(mainM);
+
+
+        CodeHelper ch = new CodeHelper();
+        ch.print();
+
 
     }
 }
