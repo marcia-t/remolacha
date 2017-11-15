@@ -1,8 +1,10 @@
 package org.unq.compiler.remolacha.app;
-import org.unq.compiler.remolacha.compiler.CodeHelper;
+import org.unq.compiler.remolacha.compiler.Compiler;
+import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.*;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.expressions.*;
+import org.unq.compiler.remolacha.compiler.utils.CClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,9 +146,18 @@ public class App {
         mainM.setBlock(blockMain);
         main.addMethod(mainM);
 
+        List<Class> classes = new ArrayList<>();
+        classes.add(main);
+        classes.add(contador);
+        Program p = new Program(classes);
 
-        CodeHelper ch = new CodeHelper();
-        ch.print();
+        Compiler comp = new Compiler(p);
+
+        List<CClass> cclasses = comp.collectClasses();
+        List<CSelector> cSelectors = comp.collectSelectors();
+
+
+
 
 
     }
