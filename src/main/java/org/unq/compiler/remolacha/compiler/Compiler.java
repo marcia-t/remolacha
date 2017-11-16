@@ -4,6 +4,7 @@ import org.unq.compiler.remolacha.grammar.Program;
 import org.unq.compiler.remolacha.compiler.utils.CClass;
 import org.unq.compiler.remolacha.compiler.utils.CSelector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,12 @@ public class Compiler {
 
     private Program program;
     private Collector collector = new Collector();
+    private Checker checker = new Checker();
+    private CodeHelper codeHelper = new CodeHelper();
+
+    private List<CClass> cClasses = new ArrayList<>();
+    private List<CSelector> cSelectors = new ArrayList<>();
+
 
 
     public Compiler(Program program) {
@@ -35,13 +42,43 @@ public class Compiler {
         this.collector = collector;
     }
 
-    public List<CClass> collectClasses(){
-        return this.collector.collectClasses(program);
+    public void collectClasses(){
+        cClasses = this.collector.collectClasses(program);
     }
 
-    public List<CSelector> collectSelectors(){
-        return this.collector.collectSelectors(program);
+    public void collectSelectors(){
+        cSelectors = this.collector.collectSelectors(program);
     }
 
+    public void collect(){
+        this.collectClasses();
+        this.collectSelectors();
+    }
+
+    public void compile(){
+        String code = "";
+        code+= this.codeHelper.getHeader();
+        if (checker.checkProgram(program)){
+            this.collect();
+            code += this.compileClassesDefinition();
+        }
+        else {
+            code = "Falló la compilación";
+        }
+        System.out.println(code);
+    }
+
+
+    /*
+    * Método que armará las definiciones de clases
+    * Ej:
+    *  Clase* cls2 ;
+    *  Clase* cls3 ;
+    **/
+    private String compileClassesDefinition() {
+        String classes = "";
+
+        return null;
+    }
 
 }

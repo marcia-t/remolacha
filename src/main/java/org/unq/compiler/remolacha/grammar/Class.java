@@ -50,4 +50,8 @@ public class Class {
     public void addLocalVar(LocalVar lv){
         this.locals.add(lv);
     }
+
+    public int localsSize(){
+        return locals.size();
+    }
 }
