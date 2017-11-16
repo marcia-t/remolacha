@@ -50,13 +50,26 @@ public class Collector {
         for (Class cl:classes) {
             List<Method> methods = cl.getMethods();
             for(Method m : methods){
-                int args = m.getParameters().size();
-                CSelector sc = new CSelector(m.getId(), args, "sel"+selCounter);
-                selCounter++;
-                cselectors.add(sc);
+                if (!exists(m, cselectors)){
+                    int args = m.getParameters().size();
+                    CSelector sc = new CSelector(m.getId(), args, "sel"+selCounter);
+                    selCounter++;
+                    cselectors.add(sc);
+                }
             }
         }
 
         return cselectors;
+    }
+
+    private boolean exists(Method m, List<CSelector> cselectors) {
+        for (CSelector cs :
+                cselectors) {
+            if (m.getId().equals(cs.getName()) && m.getParameters().size() == cs.getArgs()){
+                return true;
+            }
+        }
+        return false;
+
     }
 }
