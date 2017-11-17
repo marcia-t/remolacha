@@ -3,7 +3,7 @@ package org.unq.compiler.remolacha.compiler.utils;
 /**
  * Created by mtejeda on 15/11/17.
  *
- * Clase que representa las clases de Remolacha compiladas
+ * Clase que representa los nombres de las clases de Remolacha compiladas
  */
 public class CClass {
 

@@ -13,9 +13,7 @@ import java.util.List;
 public class Compiler {
 
     private Program program;
-    private Collector collector = new Collector();
     private Checker checker = new Checker();
-    private CodeHelper codeHelper = new CodeHelper();
 
     private List<CClass> cClasses = new ArrayList<>();
     private List<CSelector> cSelectors = new ArrayList<>();
@@ -34,20 +32,12 @@ public class Compiler {
         this.program = program;
     }
 
-    public Collector getCollector() {
-        return collector;
-    }
-
-    public void setCollector(Collector collector) {
-        this.collector = collector;
-    }
-
     public void collectClasses(){
-        cClasses = this.collector.collectClasses(program);
+        cClasses = Collector.collectClasses(program);
     }
 
     public void collectSelectors(){
-        cSelectors = this.collector.collectSelectors(program);
+        cSelectors = Collector.collectSelectors(program);
     }
 
     public void collect(){
@@ -57,10 +47,11 @@ public class Compiler {
 
     public void compile(){
         String code = "";
-        code+= this.codeHelper.getHeader();
+        code+= CodeHelper.getHeader();
         if (checker.checkProgram(program)){
             this.collect();
             code += this.compileClassesDefinition();
+            code += CodeHelper.getNativeClassesDef();
         }
         else {
             code = "Falló la compilación";
@@ -76,9 +67,7 @@ public class Compiler {
     *  Clase* cls3 ;
     **/
     private String compileClassesDefinition() {
-        String classes = "";
-
-        return classes;
+        return CodeHelper.getClassesHeader(cClasses);
     }
 
 }

@@ -2,7 +2,10 @@ package org.unq.compiler.remolacha.compiler.utils;
 
 /**
  * Created by mtejeda on 15/11/17.
+ * Clase que representa los selectores de la tabla
+ * cuenta con el nombre del método y la cantidad de argumentos que recibirá ese método
  */
+
 public class CSelector {
 
     private String name;

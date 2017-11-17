@@ -154,7 +154,7 @@ public class App {
 
         Compiler comp = new Compiler(p);
 
-        comp.collect();
+        comp.compile();
 
 
 
