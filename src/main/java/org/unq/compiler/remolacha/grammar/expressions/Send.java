@@ -1,5 +1,7 @@
 package org.unq.compiler.remolacha.grammar.expressions;
 
+import org.unq.compiler.remolacha.compiler.Collector;
+import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Expression;
 
 import java.util.ArrayList;
@@ -49,5 +51,17 @@ public class Send extends Expression {
 
     public void setArguments(List<Expression> arguments) {
         this.arguments = arguments;
+    }
+
+    @Override
+    public List<CSelector> collectMessages(List<CSelector> cselectors) {
+        String id = this.getID();
+        int sz = this.getArguments().size();
+        if (!Collector.existsMessage(id, sz, cselectors)){
+            CSelector cs = new CSelector(id, sz);
+            cselectors.add(cs);
+        }
+        cselectors = this.expr.collectMessages(cselectors);
+        return cselectors;
     }
 }

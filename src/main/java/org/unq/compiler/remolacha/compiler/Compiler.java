@@ -78,7 +78,7 @@ public class Compiler {
     private String compileClassesDefinition() {
         String classes = "";
 
-        return null;
+        return classes;
     }
 
 }

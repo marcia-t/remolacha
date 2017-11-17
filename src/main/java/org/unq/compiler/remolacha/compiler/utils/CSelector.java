@@ -7,12 +7,11 @@ public class CSelector {
 
     private String name;
     private int args;
-    private String ID;
 
-    public CSelector(String name, int args, String selector) {
+
+    public CSelector(String name, int args) {
         this.name = name;
         this.args = args;
-        this.ID = selector;
     }
 
     public String getName() {
@@ -31,11 +30,4 @@ public class CSelector {
         this.args = args;
     }
 
-    public String getSelector() {
-        return ID;
-    }
-
-    public void setSelector(String selector) {
-        this.ID = selector;
-    }
 }

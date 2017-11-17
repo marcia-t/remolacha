@@ -1,10 +1,12 @@
 package org.unq.compiler.remolacha.compiler;
 
 import org.unq.compiler.remolacha.grammar.Class;
+import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
 import org.unq.compiler.remolacha.grammar.Program;
 import org.unq.compiler.remolacha.compiler.utils.CClass;
 import org.unq.compiler.remolacha.compiler.utils.CSelector;
+import org.unq.compiler.remolacha.grammar.expressions.Send;
 import sun.security.pkcs11.wrapper.CK_SLOT_INFO;
 
 import java.util.ArrayList;
@@ -41,28 +43,48 @@ public class Collector {
 
     public List<CSelector> collectSelectors(Program program) {
         List<CSelector> cselectors = new ArrayList<>();
-        CSelector addSel = new CSelector("add", 1, "sel1");
-        CSelector printSel = new CSelector("print", 0, "sel0");
+        CSelector addSel = new CSelector("add", 1);
+        CSelector printSel = new CSelector("print", 0);
         cselectors.add(addSel);
         cselectors.add(printSel);
-        int selCounter = 2;
         List<Class> classes = program.getClasses();
         for (Class cl:classes) {
             List<Method> methods = cl.getMethods();
             for(Method m : methods){
                 if (!exists(m, cselectors)){
                     int args = m.getParameters().size();
-                    CSelector sc = new CSelector(m.getId(), args, "sel"+selCounter);
-                    selCounter++;
+                    CSelector sc = new CSelector(m.getId(), args);
                     cselectors.add(sc);
                 }
+                cselectors = this.collectOtherMethods(cselectors, m);
             }
         }
 
         return cselectors;
     }
 
-    private boolean exists(Method m, List<CSelector> cselectors) {
+    private List<CSelector> collectOtherMethods(List<CSelector> cselectors, Method m) {
+        List<Expression> exprs= m.getBlock();
+        for (Expression exp: exprs){
+            cselectors = exp.collectMessages(cselectors);
+        }
+        return cselectors;
+    }
+
+    public static boolean existsMessage(String id, int sz, List<CSelector> cselectors) {
+        for (CSelector cs :
+                cselectors) {
+            if (id.equals(cs.getName()) && sz == cs.getArgs()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /*
+    * Chequea si el método ya fue agregado a la lista de selectores*/
+    public static boolean exists(Method m, List<CSelector> cselectors) {
         for (CSelector cs :
                 cselectors) {
             if (m.getId().equals(cs.getName()) && m.getParameters().size() == cs.getArgs()){

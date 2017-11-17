@@ -1,6 +1,9 @@
 package org.unq.compiler.remolacha.grammar.expressions;
 
+import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Expression;
+
+import java.util.List;
 
 public class Set extends Expression {
 
@@ -27,4 +30,12 @@ public class Set extends Expression {
     public void setExpr(Expression expr) {
         this.expr = expr;
     }
+
+    @Override
+    public List<CSelector> collectMessages(List<CSelector> cselectors) {
+        cselectors = expr.collectMessages(cselectors);
+        return cselectors;
+    }
+
+
 }

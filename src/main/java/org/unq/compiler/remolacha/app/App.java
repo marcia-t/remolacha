@@ -93,7 +93,7 @@ public class App {
         contador.addMethod(valorActual);
 
 
-        /*Variables de main*/
+        /*Variables de clase main*/
         List<LocalVar> mainLocals = new ArrayList<LocalVar>();
         LocalVar c = new LocalVar("c");
 
@@ -102,7 +102,7 @@ public class App {
         /*Métodos de main*/
         Method mainM = new Method("main");
 
-        /*Bloque de main*/
+        /*Bloque de método main*/
         List<Expression> blockMain = new ArrayList<>();
         /*Expresiones de línea 1*/
         /*set c = new Contador . inicializar (0)*/
@@ -139,6 +139,7 @@ public class App {
         List<Expression> lArg2 = new ArrayList<>();
         lArg2.add(n2);
         Send e20 =  new Send(c2, "incrementarEn", lArg2);
+        //Send e20 =  new Send(c2, "incrementarEn PEPE", lArg2);
         Send e21 = new Send(e20, "valorActual");
         Send e22 = new Send(e21, "print");
 
@@ -153,8 +154,7 @@ public class App {
 
         Compiler comp = new Compiler(p);
 
-        List<CClass> cclasses = comp.collectClasses();
-        List<CSelector> cSelectors = comp.collectSelectors();
+        comp.collect();
 
 
 
