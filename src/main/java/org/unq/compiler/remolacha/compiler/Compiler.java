@@ -52,11 +52,17 @@ public class Compiler {
             this.collect();
             code += this.compileClassesDefinition();
             code += CodeHelper.getNativeClassesDef();
+            code += this.compileClassesContructors();
         }
         else {
             code = "Falló la compilación";
         }
         System.out.println(code);
+    }
+
+    private String compileClassesContructors() {
+        
+        return null;
     }
 
 
