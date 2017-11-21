@@ -103,6 +103,16 @@ public class Collector {
             }
         }
         return false;
+    }
 
+
+    /*
+    * Retorna el nombre de la clase compilada
+    * */
+    public static String getCClassName(List<CClass> cClasses, String name) {
+        for (CClass ccl : cClasses){
+            if (ccl.getName().equals(name)) return ccl.getID();
+        }
+        return null;
     }
 }

@@ -1,8 +1,9 @@
 package org.unq.compiler.remolacha.compiler;
 
-import org.unq.compiler.remolacha.grammar.Program;
 import org.unq.compiler.remolacha.compiler.utils.CClass;
 import org.unq.compiler.remolacha.compiler.utils.CSelector;
+import org.unq.compiler.remolacha.grammar.Class;
+import org.unq.compiler.remolacha.grammar.Program;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class Compiler {
         code+= CodeHelper.getHeader();
         if (checker.checkProgram(program)){
             this.collect();
-            code += this.compileClassesDefinition();
+            code += CodeHelper.getClassesHeader(cClasses);
             code += CodeHelper.getNativeClassesDef();
             code += this.compileClassesContructors();
         }
@@ -61,19 +62,16 @@ public class Compiler {
     }
 
     private String compileClassesContructors() {
-        
-        return null;
+        String constructors = "";
+        for(Class cl :  program.getClasses()){
+            String compiledName = Collector.getCClassName(cClasses, cl.getId());
+            constructors += CodeHelper.getClassConstructor(cl, compiledName);
+            constructors += "\n";
+        }
+        return constructors;
     }
 
 
-    /*
-    * Método que armará las definiciones de clases
-    * Ej:
-    *  Clase* cls2 ;
-    *  Clase* cls3 ;
-    **/
-    private String compileClassesDefinition() {
-        return CodeHelper.getClassesHeader(cClasses);
-    }
+
 
 }
