@@ -58,7 +58,8 @@ public class Send extends Expression {
         String id = this.getID();
         int sz = this.getArguments().size();
         if (!Collector.existsMessage(id, sz, cselectors)){
-            CSelector cs = new CSelector(id, sz);
+            int selCounter = cselectors.size();
+            CSelector cs = new CSelector(id, sz, "sel" + selCounter);
             cselectors.add(cs);
         }
         cselectors = this.expr.collectMessages(cselectors);

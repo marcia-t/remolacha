@@ -49,8 +49,8 @@ public class Collector {
     * que se utilizan en los bloques*/
     public static List<CSelector> collectSelectors(Program program) {
         List<CSelector> cselectors = new ArrayList<>();
-        CSelector addSel = new CSelector("add", 1);
-        CSelector printSel = new CSelector("print", 0);
+        CSelector printSel = new CSelector("print", 0, "sel0");
+        CSelector addSel = new CSelector("add", 1, "sel1");
         cselectors.add(addSel);
         cselectors.add(printSel);
         List<Class> classes = program.getClasses();
@@ -59,7 +59,8 @@ public class Collector {
             for(Method m : methods){
                 if (!exists(m, cselectors)){
                     int args = m.getParameters().size();
-                    CSelector sc = new CSelector(m.getId(), args);
+                    int selCounter = cselectors.size();
+                    CSelector sc = new CSelector(m.getId(), args, "sel" + selCounter);
                     cselectors.add(sc);
                 }
                 cselectors = collectOtherMethods(cselectors, m);

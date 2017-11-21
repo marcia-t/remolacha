@@ -10,11 +10,17 @@ public class CSelector {
 
     private String name;
     private int args;
-
-
+    private String id;
+/*
     public CSelector(String name, int args) {
         this.name = name;
         this.args = args;
+    }*/
+
+    public CSelector(String name, int args, String id) {
+        this.name = name;
+        this.args = args;
+        this.id = id;
     }
 
     public String getName() {
@@ -33,4 +39,12 @@ public class CSelector {
         this.args = args;
     }
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
