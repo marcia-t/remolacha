@@ -1,7 +1,9 @@
 package org.unq.compiler.remolacha.compiler;
 
 import org.unq.compiler.remolacha.compiler.utils.CClass;
+import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
+import org.unq.compiler.remolacha.grammar.Method;
 
 import java.util.List;
 
@@ -61,17 +63,17 @@ public class CodeHelper {
         return "/* Construye un objeto de clase Int */\n" +
                 "Objeto* constructor_cls0 ( Num valor ) {\n" +
                 "   Objeto* obj = new Objeto ;\n" +
-                "   obj - > clase = cls0 ; /* Int */\n" +
-                "   obj - > varsInstancia = new PTR [1];\n" +
-                "   obj - > varsInstancia[0] = NUM_TO_PTR (valor);\n" +
+                "   obj -> clase = cls0 ; /* Int */\n" +
+                "   obj -> varsInstancia = new PTR [1];\n" +
+                "   obj -> varsInstancia[0] = NUM_TO_PTR (valor);\n" +
                 "   return obj ;\n" +
                 " }\n" +
                 "/* Construye un objeto de clase String */\n" +
                 "Objeto* constructor_cls1 ( String valor ) {\n" +
                 "   Objeto* obj = new Objeto ;\n" +
-                "   obj - > clase = cls1 ; /* String */\n" +
-                "   obj - > varsInstancia = new PTR [1];\n" +
-                "   obj - > varsInstancia[0] = STRING_TO_PTR (valor);\n" +
+                "   obj -> clase = cls1 ; /* String */\n" +
+                "   obj -> varsInstancia = new PTR [1];\n" +
+                "   obj -> varsInstancia[0] = STRING_TO_PTR (valor);\n" +
                 "   return obj ;\n" +
                 "}\n";
     }
@@ -89,5 +91,40 @@ public class CodeHelper {
                                 "   return obj;\n" +
                 "} ";
         return constructor;
+    }
+
+    public static String compileMethods(Class aClass, List<CClass> cClasses, List<CSelector> cSelectors) {
+        List<Method> methods = aClass.getMethods();
+        String compiledMethods = "";
+        String cclass = Collector.getCClassName(cClasses, aClass.getId());
+        for (Method m : methods){
+            compiledMethods += CodeHelper.compileMethod(m, cclass,  cSelectors);
+        }
+        return compiledMethods;
+    }
+
+    private static String compileMethod(Method m, String cclass, List<CSelector> cSelectors) {
+        String declaration= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
+        declaration+= CodeHelper.getParameters(m.getParameters());
+        declaration += "{";
+        /*TODO: AQUÍ HAY QUE COMPILAR TODAS LAS EXPRESIONES DENTRO DEL MÉTODO*/
+
+        declaration += "}";
+        return declaration;
+    }
+
+    private static String getParameters(List<String> parameters) {
+        String param = "(Objeto* o0";
+        int counter = 1;
+        for (String p : parameters){
+            param+= ", Objeto* o"+counter;
+        }
+        param += ")";
+        return param;
+    }
+
+    private static String getMethodDeclaration(Method m, String cclass, List<CSelector> cSelectors) {
+        String selectorId = Collector.getSelectorId(m, cSelectors);
+        return "Objeto* met_"+cclass+"_"+selectorId;
     }
 }

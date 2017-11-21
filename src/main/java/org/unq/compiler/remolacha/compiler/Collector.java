@@ -116,4 +116,16 @@ public class Collector {
         }
         return null;
     }
+
+    /*
+    * Retorna el identificador del selector (sel1, sel2....)
+    * */
+    public static String getSelectorId(Method m, List<CSelector> cSelectors) {
+        for (CSelector cs : cSelectors) {
+            if (cs.getName().equals(m.getId()) && cs.getArgs() == m.getParameters().size()){
+                return cs.getId();
+            }
+        }
+       return null;
+    }
 }

@@ -78,8 +78,7 @@ public class Compiler {
     * Compila los métodos de una clase
     * */
     private String compileClassMethods(Class aClass) {
-
-        return null;
+        return CodeHelper.compileMethods(aClass, cClasses, cSelectors);
     }
 
     /*
