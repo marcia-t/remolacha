@@ -118,6 +118,7 @@ public class CodeHelper {
         int counter = 1;
         for (String p : parameters){
             param+= ", Objeto* o"+counter;
+            counter++;
         }
         param += ")";
         return param;

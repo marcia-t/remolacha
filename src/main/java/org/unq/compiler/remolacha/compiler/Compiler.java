@@ -54,7 +54,7 @@ public class Compiler {
             code += CodeHelper.getClassesHeader(cClasses);
             code += CodeHelper.getNativeClassesDef();
             code += this.compileClassesContructors();
-            //code += this.compileMethods();
+            code += this.compileMethods();
         }
         else {
             code = "Falló la compilación";
@@ -69,17 +69,12 @@ public class Compiler {
     private String compileMethods() {
         String methods = "";
         for (int i = 0; i < program.getClasses().size(); i++) {
-            methods += this.compileClassMethods(program.getClasses().get(i));
+            Class aClass = program.getClasses().get(i);
+            methods += CodeHelper.compileMethods(aClass, cClasses, cSelectors);
         }
-        return null;
+        return methods;
     }
 
-    /*
-    * Compila los métodos de una clase
-    * */
-    private String compileClassMethods(Class aClass) {
-        return CodeHelper.compileMethods(aClass, cClasses, cSelectors);
-    }
 
     /*
     * Compila los constructores de todas las clases
