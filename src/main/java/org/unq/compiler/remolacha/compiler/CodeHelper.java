@@ -3,6 +3,7 @@ package org.unq.compiler.remolacha.compiler;
 import org.unq.compiler.remolacha.compiler.utils.CClass;
 import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
+import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
 
 import java.util.List;
@@ -107,10 +108,19 @@ public class CodeHelper {
         String declaration= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{";
-        /*TODO: AQUÍ HAY QUE COMPILAR TODAS LAS EXPRESIONES DENTRO DEL MÉTODO*/
-
+        /*TODO: AQUÍ HAY QUE COMPILAR TODAS LAS EXPRESIONES DENTRO DEL MÉTODO (bloque)
+        * OJO: QUIZÁS NECESITEMOS PASAR LA CLASE.*/
+        declaration += CodeHelper.compileExpressions(m);
         declaration += "}";
         return declaration;
+    }
+
+    private static String compileExpressions(Method method) {
+        String block = "";
+        for (Expression e: method.getBlock()){
+            block += e.compile(method.getParameters());
+        }
+        return block;
     }
 
     private static String getParameters(List<String> parameters) {
