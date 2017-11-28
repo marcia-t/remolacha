@@ -108,8 +108,6 @@ public class CodeHelper {
         String declaration= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
-        /*TODO: AQUÍ HAY QUE COMPILAR TODAS LAS EXPRESIONES DENTRO DEL MÉTODO (bloque)
-        * OJO: QUIZÁS NECESITEMOS  (sí) PASAR LA CLASE.*/
         declaration += CodeHelper.compileExpressions(aClass, m);
         declaration += "}\n";
         return declaration;
@@ -120,6 +118,7 @@ public class CodeHelper {
         for (Expression e: method.getBlock()){
             block += e.compile(method, aClass);
         }
+        /*TODO: al final del bloque agregar el return*/
         return block;
     }
 

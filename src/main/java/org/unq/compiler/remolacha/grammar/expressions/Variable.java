@@ -29,16 +29,12 @@ public class Variable extends Expression {
     }
 
     @Override
-    /*
-    * Se supone que la variable se llamará solamente cuando se retorne.
-    * */
     public String compile(Method method, Class aClass) {
         /*ver si ID forma parte de los parámetros o de las vars de la clase*/
         String ret = "return ";
         String compiled = "";
         for (int i = 0; i < aClass.getLocals().size(); i++) {
             if (aClass.getLocals().get(i).getId().equals(this.getID())) {
-
                 compiled += "    PTR_TO_OBJECT(o0->varsInstancia[" + i + "])\n";
             }
         }
@@ -47,7 +43,6 @@ public class Variable extends Expression {
                 compiled += "    O" + i+"\n";
             }
         }
-
         return compiled;
     }
 }

@@ -33,6 +33,6 @@ public class ConstantNumber extends Expression {
 
     @Override
     public String compile(Method parameters, Class aClass) {
-        return null;
+        return "constructor_cls0("+this.getNUM()+");";
     }
 }
