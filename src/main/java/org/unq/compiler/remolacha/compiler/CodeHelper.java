@@ -108,15 +108,15 @@ public class CodeHelper {
         String declaration= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
-        declaration += CodeHelper.compileExpressions(aClass, m);
+        declaration += CodeHelper.compileExpressions(aClass, m, cclass);
         declaration += "}\n";
         return declaration;
     }
 
-    private static String compileExpressions(Class aClass, Method method) {
+    private static String compileExpressions(Class aClass, Method method, String cclass) {
         String block = "";
         for (Expression e: method.getBlock()){
-            block += e.compile(method, aClass);
+            block += e.compile(method, aClass, cclass);
         }
         /*TODO: al final del bloque agregar el return*/
         return block;

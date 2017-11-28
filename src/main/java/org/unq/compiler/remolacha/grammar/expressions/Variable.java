@@ -29,7 +29,7 @@ public class Variable extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass) {
+    public String compile(Method method, Class aClass, String cclass) {
         /*ver si ID forma parte de los parámetros o de las vars de la clase*/
         String ret = "return ";
         String compiled = "";

@@ -18,3 +18,15 @@ class Main
         c . incrementar (). valorActual (). print ()
         c . incrementar (). valorActual (). print ()
         c . incrementarEn (10). valorActual (). print ()
+
+
+
+set valor = valorInicial
+si valor es instancia --> ver a qué variable de instancia se refiere y asignarselo a la celda de esa variable en el objeto  o0
+si valor es parámetro (parte de la ejecución) --> 
+
+
+
+
+o0->varsInstancia[0] = o1;
+return constructor_cls0(0);

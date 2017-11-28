@@ -8,6 +8,6 @@ public abstract class Expression {
 
     public abstract List<CSelector> collectMessages(List<CSelector> cselectors);
 
-    public abstract String compile(Method parameters, Class aClass);
+    public abstract String compile(Method parameters, Class aClass, String cclass);
 
 }

@@ -32,7 +32,7 @@ public class ConstantString extends Expression{
     }
 
     @Override
-    public String compile(Method parameters, Class aClass) {
+    public String compile(Method parameters, Class aClass, String cclass) {
         return  "constructor_cls1(\""+this.getSTRING()+"\");";
     }
 }

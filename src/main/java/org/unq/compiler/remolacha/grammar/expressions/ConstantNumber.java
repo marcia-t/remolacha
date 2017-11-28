@@ -32,7 +32,7 @@ public class ConstantNumber extends Expression {
     }
 
     @Override
-    public String compile(Method parameters, Class aClass) {
+    public String compile(Method parameters, Class aClass, String cclass) {
         return "constructor_cls0("+this.getNUM()+");";
     }
 }
