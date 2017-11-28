@@ -57,7 +57,7 @@ public class Compiler {
             code += this.compileMethods();
         }
         else {
-            code = "Falló la compilación";
+            System.out.println("Falló la compilación");
         }
         System.out.println(code);
     }
@@ -65,6 +65,7 @@ public class Compiler {
     /*
     * Compila los métodos de cada clase
     * TODO: ver si compilar o no los métodos de main
+    * Se van a compilar los métodos ya que después se llamarán desde el Main de C++
     * */
     private String compileMethods() {
         String methods = "";

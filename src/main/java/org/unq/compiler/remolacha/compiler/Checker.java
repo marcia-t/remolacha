@@ -7,7 +7,7 @@ import org.unq.compiler.remolacha.grammar.Program;
  */
 public class Checker {
 
-
+    /*TODO: CHECK!! */
     public boolean checkProgram(Program p){
         return true;
     }

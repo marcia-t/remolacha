@@ -26,15 +26,15 @@ public class CodeHelper {
             "   Clase* clase;\n" +
             "   PTR* varsInstancia;\n" +
             "};\n" +
-            "//typedef Objeto* (*Metodo )(...);\n" +
+            "typedef Objeto* (*Metodo )(...);\n" +
             "#define NUM_TO_PTR(N) ((PTR)(N))\n" +
-            "#define PTR_TO_NUM (P) ((Num)(P))\n" +
-            "#define STRING_TO_PTR (S) ((PTR)(S))\n" +
-            "#define PTR_TO_STRING (P) ((String)(P))\n" +
-            "#define METHOD_TO_PTR (M) ((PTR)(M))\n" +
-            "#define PTR_TO_METHOD (P) ((Metodo)(P))\n" +
-            "#define OBJECT_TO_PTR (O) ((PTR)(O))\n" +
-            "#define PTR_TO_OBJECT (P) ((Objeto*)(P)) \n";
+            "#define PTR_TO_NUM(P) ((Num)(P))\n" +
+            "#define STRING_TO_PTR(S) ((PTR)(S))\n" +
+            "#define PTR_TO_STRING(P) ((String)(P))\n" +
+            "#define METHOD_TO_PTR(M) ((PTR)(M))\n" +
+            "#define PTR_TO_METHOD(P) ((Metodo)(P))\n" +
+            "#define OBJECT_TO_PTR(O) ((PTR)(O))\n" +
+            "#define PTR_TO_OBJECT(P) ((Objeto*)(P)) \n";
 
 
     public static String getHeader() {
@@ -99,26 +99,26 @@ public class CodeHelper {
         String compiledMethods = "";
         String cclass = Collector.getCClassName(cClasses, aClass.getId());
         for (Method m : methods){
-            compiledMethods += CodeHelper.compileMethod(m, cclass,  cSelectors);
+            compiledMethods += CodeHelper.compileMethod(aClass, m, cclass,  cSelectors);
         }
         return compiledMethods;
     }
 
-    private static String compileMethod(Method m, String cclass, List<CSelector> cSelectors) {
+    private static String compileMethod(Class aClass, Method m, String cclass, List<CSelector> cSelectors) {
         String declaration= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
         declaration+= CodeHelper.getParameters(m.getParameters());
-        declaration += "{";
+        declaration += "{\n";
         /*TODO: AQUÍ HAY QUE COMPILAR TODAS LAS EXPRESIONES DENTRO DEL MÉTODO (bloque)
-        * OJO: QUIZÁS NECESITEMOS PASAR LA CLASE.*/
-        declaration += CodeHelper.compileExpressions(m);
-        declaration += "}";
+        * OJO: QUIZÁS NECESITEMOS  (sí) PASAR LA CLASE.*/
+        declaration += CodeHelper.compileExpressions(aClass, m);
+        declaration += "}\n";
         return declaration;
     }
 
-    private static String compileExpressions(Method method) {
+    private static String compileExpressions(Class aClass, Method method) {
         String block = "";
         for (Expression e: method.getBlock()){
-            block += e.compile(method.getParameters());
+            block += e.compile(method, aClass);
         }
         return block;
     }
