@@ -19,6 +19,6 @@ public class Self extends Expression {
 
     @Override
     public String compile(Method parameters, Class aClass, String cclass) {
-        return "o0;";
+        return "o0";
     }
 }

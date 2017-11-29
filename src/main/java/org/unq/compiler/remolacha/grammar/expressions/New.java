@@ -33,6 +33,6 @@ public class New extends Expression {
 
     @Override
     public String compile(Method parameters, Class aClass, String cclass) {
-        return "constructor_"+cclass+"();";
+        return "constructor_"+cclass+"()";
     }
 }

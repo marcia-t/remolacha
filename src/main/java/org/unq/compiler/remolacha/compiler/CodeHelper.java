@@ -115,9 +115,19 @@ public class CodeHelper {
 
     private static String compileExpressions(Class aClass, Method method, String cclass) {
         String block = "";
-        for (Expression e: method.getBlock()){
+        for (int i = 0; i < method.getBlock().size(); i++) {
+            if (i == method.getBlock().size()-1){
+                block += "return ";
+            }
+            Expression e = method.getBlock().get(i);
             block += e.compile(method, aClass, cclass);
+            block += ";\n";
+
         }
+       /* for (Expression e: method.getBlock()){
+            block += e.compile(method, aClass, cclass);
+
+        }*/
         /*TODO: al final del bloque agregar el return*/
         return block;
     }

@@ -31,16 +31,15 @@ public class Variable extends Expression {
     @Override
     public String compile(Method method, Class aClass, String cclass) {
         /*ver si ID forma parte de los parámetros o de las vars de la clase*/
-        String ret = "return ";
         String compiled = "";
         for (int i = 0; i < aClass.getLocals().size(); i++) {
             if (aClass.getLocals().get(i).getId().equals(this.getID())) {
-                compiled += "    PTR_TO_OBJECT(o0->varsInstancia[" + i + "])\n";
+                compiled += "PTR_TO_OBJECT(o0->varsInstancia[" + i + "])";
             }
         }
         for (int i = 0; i < method.getParameters().size(); i++) {
             if (this.getID().equals(method.getParameters().get(i))) {
-                compiled += "    O" + i+"\n";
+                compiled += "O" + i;
             }
         }
         return compiled;
