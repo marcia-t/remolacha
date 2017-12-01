@@ -10,4 +10,5 @@ public abstract class Expression {
 
     public abstract String compile(Method parameters, Class aClass, String cclass);
 
+    public abstract String getTemps(Method method, Class aClass, String cclass, int i);
 }

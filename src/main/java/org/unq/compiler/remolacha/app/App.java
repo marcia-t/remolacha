@@ -1,10 +1,9 @@
 package org.unq.compiler.remolacha.app;
+
 import org.unq.compiler.remolacha.compiler.Compiler;
-import org.unq.compiler.remolacha.compiler.utils.CSelector;
-import org.unq.compiler.remolacha.grammar.*;
 import org.unq.compiler.remolacha.grammar.Class;
+import org.unq.compiler.remolacha.grammar.*;
 import org.unq.compiler.remolacha.grammar.expressions.*;
-import org.unq.compiler.remolacha.compiler.utils.CClass;
 
 import java.util.ArrayList;
 import java.util.List;

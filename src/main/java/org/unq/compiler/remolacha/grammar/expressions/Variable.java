@@ -37,11 +37,18 @@ public class Variable extends Expression {
                 compiled += "PTR_TO_OBJECT(o0->varsInstancia[" + i + "])";
             }
         }
+        /*se suma uno a los parámetros porque en el fuente no se cuenta el primer parámetro que es el objeto*/
         for (int i = 0; i < method.getParameters().size(); i++) {
             if (this.getID().equals(method.getParameters().get(i))) {
-                compiled += "O" + i;
+                int n = i+1;
+                compiled += "o" + n;
             }
         }
         return compiled;
+    }
+
+    @Override
+    public String getTemps(Method method, Class aClass, String cclass, int i) {
+        return "";
     }
 }

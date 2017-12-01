@@ -23,10 +23,28 @@ class Main
 
 set valor = valorInicial
 si valor es instancia --> ver a qué variable de instancia se refiere y asignarselo a la celda de esa variable en el objeto  o0
-si valor es parámetro (parte de la ejecución) --> 
+si valor es parámetro (parte de la ejecución) --> ver qué nro de parámetro es y asignarselo a él.
 
+self.incrementarEn(1)
 
+class Foo
+local x
+def bar(o)
+o.mandar(x, 42)
 
+Objeto* met_cls2_sel3(Objeto* o0, Objeto* o1) {
+    Objeto* tmp1 = o0->varsInstancia[0]; /* Acceso a "x" */
+    Objeto* tmp2 = constructor_cls0(42);
+    /* sel4 => mandar/2 */
+    if (o1->clase->metodos[4] == NULL) {
+    fprintf(
+    stderr,
+    "El objeto no acepta el mensaje ’mandar/2’.\n"
+    );
+    exit(1);
+    }
+return PTR_TO_METHOD(o1->clase->metodos[4])(o1, tmp1, tmp2);
+}
 
 o0->varsInstancia[0] = o1;
 return constructor_cls0(0);

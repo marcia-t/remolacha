@@ -32,7 +32,12 @@ public class New extends Expression {
     }
 
     @Override
-    public String compile(Method parameters, Class aClass, String cclass) {
+    public String compile(Method method, Class aClass, String cclass) {
         return "constructor_"+cclass+"()";
+    }
+
+    @Override
+    public String getTemps(Method method, Class aClass, String cclass, int i) {
+        return "";
     }
 }

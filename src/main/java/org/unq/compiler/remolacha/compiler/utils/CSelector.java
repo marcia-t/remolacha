@@ -11,11 +11,7 @@ public class CSelector {
     private String name; //name es el nombre del método
     private int args;
     private String id; //id es el nombre del selector
-/*
-    public CSelector(String name, int args) {
-        this.name = name;
-        this.args = args;
-    }*/
+
 
     public CSelector(String name, int args, String id) {
         this.name = name;

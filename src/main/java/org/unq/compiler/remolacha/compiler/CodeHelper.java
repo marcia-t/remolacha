@@ -5,6 +5,7 @@ import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
+import org.unq.compiler.remolacha.grammar.expressions.Send;
 
 import java.util.List;
 
@@ -106,8 +107,10 @@ public class CodeHelper {
 
     private static String compileMethod(Class aClass, Method m, String cclass, List<CSelector> cSelectors) {
         String declaration= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
+
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
+        declaration+= "/*"+aClass.getId()+"*/\n";
         declaration += CodeHelper.compileExpressions(aClass, m, cclass);
         declaration += "}\n";
         return declaration;
@@ -115,6 +118,9 @@ public class CodeHelper {
 
     private static String compileExpressions(Class aClass, Method method, String cclass) {
         String block = "";
+        for (Expression e: method.getBlock()){
+            block += e.getTemps(method, aClass, cclass, 0);
+        }
         for (int i = 0; i < method.getBlock().size(); i++) {
             if (i == method.getBlock().size()-1){
                 block += "return ";
@@ -124,13 +130,10 @@ public class CodeHelper {
             block += ";\n";
 
         }
-       /* for (Expression e: method.getBlock()){
-            block += e.compile(method, aClass, cclass);
-
-        }*/
-        /*TODO: al final del bloque agregar el return*/
         return block;
     }
+
+
 
     private static String getParameters(List<String> parameters) {
         String param = "(Objeto* o0";
@@ -145,6 +148,7 @@ public class CodeHelper {
 
     private static String getMethodDeclaration(Method m, String cclass, List<CSelector> cSelectors) {
         String selectorId = Collector.getSelectorId(m, cSelectors);
+
         return "Objeto* met_"+cclass+"_"+selectorId;
     }
 }

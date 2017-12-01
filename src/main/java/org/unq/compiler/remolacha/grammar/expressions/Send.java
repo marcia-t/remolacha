@@ -69,7 +69,22 @@ public class Send extends Expression {
     }
 
     @Override
-    public String compile(Method parameters, Class aClass, String cclass) {
-        return null;
+    public String compile(Method method, Class aClass, String cclass) {
+        String ret = "";
+
+        return ret;
+    }
+
+    @Override
+    public String getTemps(Method method, Class aClass, String cclass, int j) {
+        String ret = "";
+        for (int i = 0; i < this.getArguments().size(); i++) {
+            Expression e = this.getArguments().get(i);
+            j++;
+            ret+= "Objeto* tmp"+j+"= "+ e.compile(method, aClass, cclass) +"\n";
+            ret+= e.getTemps(method, aClass, cclass, j);
+        }
+
+        return ret;
     }
 }
