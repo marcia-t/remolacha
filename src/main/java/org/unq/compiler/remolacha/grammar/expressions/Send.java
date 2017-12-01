@@ -70,8 +70,10 @@ public class Send extends Expression {
 
     @Override
     public String compile(Method method, Class aClass, String cclass) {
-        String ret = "";
-
+        String ret = "soy un send --->";
+        ret+= expr.compile(method, aClass, cclass);
+        /*levantar el selector del mensate y enviarlo con los argumentos*/
+       
         return ret;
     }
 
