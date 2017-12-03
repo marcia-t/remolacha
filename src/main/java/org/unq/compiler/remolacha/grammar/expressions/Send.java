@@ -69,15 +69,27 @@ public class Send extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass) {
-        String ret = "soy un send --->";
-        ret+= expr.compile(method, aClass, cclass);
-        /*levantar el selector del mensate y enviarlo con los argumentos*/
-       
-        return ret;
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
+        String ret = "";
+        for (int i = 0; i < aClass.getLocals().size(); i++) {
+            if (aClass.getLocals().get(i).getId().equals(this.getID())) {
+                ret += "o0->varsInstancia[" + i + "] =";
+            }
+        }
+        for (int i = 0; i < method.getParameters().size(); i++) {
+            if (this.getID().equals(method.getParameters().get(i))) {
+                ret += "o" + i+1 + " =";
+            }
+        }
+        ret += this.getExpr().compile(method, aClass, cclass, false);
+
+        if (lastLine){
+            return "return "+ ret;
+        }
+        else return ret;
     }
 
-    @Override
+   /* @Override
     public String getTemps(Method method, Class aClass, String cclass, int j) {
         String ret = "";
         for (int i = 0; i < this.getArguments().size(); i++) {
@@ -88,5 +100,5 @@ public class Send extends Expression {
         }
 
         return ret;
-    }
+    }*/
 }

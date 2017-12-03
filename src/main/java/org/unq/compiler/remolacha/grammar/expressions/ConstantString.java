@@ -32,12 +32,15 @@ public class ConstantString extends Expression{
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass) {
-        return  "constructor_cls1(\""+this.getSTRING()+"\")";
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
+        if (lastLine) {
+            return "return constructor_cls1(\""+this.getSTRING()+"\")";
+        }
+        else return  "constructor_cls1(\""+this.getSTRING()+"\")";
     }
 
-    @Override
+    /*@Override
     public String getTemps(Method method, Class aClass, String cclass, int i) {
         return "";
-    }
+    }*/
 }

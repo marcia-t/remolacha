@@ -40,7 +40,7 @@ public class Set extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
         String ret = "";
         for (int i = 0; i < aClass.getLocals().size(); i++) {
             if (aClass.getLocals().get(i).getId().equals(this.getID())) {
@@ -52,14 +52,18 @@ public class Set extends Expression {
                 ret += "o" + i+1 + " =";
             }
         }
-        ret += this.getExpr().compile(method, aClass, cclass);
-        return ret;
+        ret += this.getExpr().compile(method, aClass, cclass, false);
+
+        if (lastLine){
+            return "return constructor_cls0(0)";
+        }
+        else return ret;
     }
 
-    @Override
+   /* @Override
     public String getTemps(Method method, Class aClass, String cclass, int i) {
         return expr.getTemps(method, aClass, cclass, i);
-    }
+    }*/
 
 
 }

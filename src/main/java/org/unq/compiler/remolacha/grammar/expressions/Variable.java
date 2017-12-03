@@ -29,7 +29,7 @@ public class Variable extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
         /*ver si ID forma parte de los parámetros o de las vars de la clase*/
         String compiled = "";
         for (int i = 0; i < aClass.getLocals().size(); i++) {
@@ -44,11 +44,14 @@ public class Variable extends Expression {
                 compiled += "o" + n;
             }
         }
-        return compiled;
+        if (lastLine){
+            return "return "+compiled;
+        }
+        else return compiled;
     }
 
-    @Override
+    /*@Override
     public String getTemps(Method method, Class aClass, String cclass, int i) {
         return "";
-    }
+    }*/
 }

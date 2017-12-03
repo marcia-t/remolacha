@@ -55,11 +55,19 @@ public class Compiler {
             code += CodeHelper.getNativeClassesDef();
             code += this.compileClassesContructors();
             code += this.compileMethods();
+            code += this.compileInitialization();
         }
         else {
             System.out.println("Falló la compilación");
         }
         System.out.println(code);
+    }
+
+    private String compileInitialization() {
+        String ret ="void main () {\n";
+
+        ret += "}\n";
+        return ret;
     }
 
     /*

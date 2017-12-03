@@ -20,6 +20,7 @@ class Main
         c . incrementarEn (10). valorActual (). print ()
 
 
+o0->varsInstancia[0] =  constructor_cls2()
 
 set valor = valorInicial
 si valor es instancia --> ver a qué variable de instancia se refiere y asignarselo a la celda de esa variable en el objeto  o0

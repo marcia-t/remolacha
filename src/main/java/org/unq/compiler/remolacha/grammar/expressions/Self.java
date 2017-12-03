@@ -18,12 +18,15 @@ public class Self extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass) {
-        return "o0";
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
+        if (lastLine){
+            return "return o0";
+        }
+        else return "o0";
     }
 
-    @Override
+    /*@Override
     public String getTemps(Method method, Class aClass, String cclass, int i) {
         return "";
-    }
+    }*/
 }

@@ -63,7 +63,7 @@ public class CodeHelper {
 
     public static String getNativeClassesDef (){
         return "/* Construye un objeto de clase Int */\n" +
-                "Objeto* constructor_cls0 ( Num valor ) {\n" +
+                "Objeto* constructor_cls0 (Num valor) {\n" +
                 "   Objeto* obj = new Objeto ;\n" +
                 "   obj -> clase = cls0 ; /* Int */\n" +
                 "   obj -> varsInstancia = new PTR [1];\n" +
@@ -77,6 +77,30 @@ public class CodeHelper {
                 "   obj -> varsInstancia = new PTR [1];\n" +
                 "   obj -> varsInstancia[0] = STRING_TO_PTR (valor);\n" +
                 "   return obj ;\n" +
+                "}\n" +
+                "Objeto* met_cls0_sel0(Objeto* o0) {\n" +
+                "  cout << PTR_TO_NUM(o0->varsInstancia[0]) << endl;\n" +
+                "  return o0;\n" +
+                "}\n" +
+                "\n" +
+                "Objeto* met_cls0_sel1(Objeto* o0, Objeto* o1) {\n" +
+                "  Num n1 = PTR_TO_NUM(o0->varsInstancia[0]);\n" +
+                "  Num n2 = PTR_TO_NUM(o1->varsInstancia[0]);\n" +
+                "  return constructor_cls0(n1 + n2);\n" +
+                "}\n" +
+                "\n" +
+                "Objeto* met_cls1_sel0(Objeto* o0) {\n" +
+                "  cout << PTR_TO_STRING(o0->varsInstancia[0]) << endl;\n" +
+                "  return o0;\n" +
+                "}\n" +
+                "\n" +
+                "Objeto* met_cls1_sel1(Objeto* o0, Objeto* o1) {\n" +
+                "  String s1 = PTR_TO_STRING(o0->varsInstancia[0]);\n" +
+                "  String s2 = PTR_TO_STRING(o1->varsInstancia[0]);\n" +
+                "  string str1(s1);\n" +
+                "  string str2(s2);\n" +
+                "  const char* result = (str1 + str2).c_str();\n" +
+                "  return constructor_cls1(result);\n" +
                 "}\n";
     }
 
@@ -106,7 +130,8 @@ public class CodeHelper {
     }
 
     private static String compileMethod(Class aClass, Method m, String cclass, List<CSelector> cSelectors) {
-        String declaration= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
+        String declaration = "/*"+cclass+ "=>"+aClass.getId()+"," +m.getId()+"*/\n";
+        declaration+= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
 
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
@@ -118,21 +143,31 @@ public class CodeHelper {
 
     private static String compileExpressions(Class aClass, Method method, String cclass) {
         String block = "";
-        for (Expression e: method.getBlock()){
+        Boolean lastLine = false;
+       /* for (Expression e: method.getBlock()){
             block += e.getTemps(method, aClass, cclass, 0);
-        }
+        }*/
         for (int i = 0; i < method.getBlock().size(); i++) {
             if (i == method.getBlock().size()-1){
-                block += "return ";
+                lastLine = true;
             }
             Expression e = method.getBlock().get(i);
-            block += e.compile(method, aClass, cclass);
+            block += e.compile(method, aClass, cclass, lastLine);
             block += ";\n";
 
         }
         return block;
     }
 
+    private static String modifyLastLine(String block) {
+        String[] split = block.split("\n");
+        split[split.length-1] = "return " +split[split.length-1];
+        String ret = "";
+        for (int i = 0; i < split.length; i++) {
+            ret += split[i];
+        }
+        return ret;
+    }
 
 
     private static String getParameters(List<String> parameters) {

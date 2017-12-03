@@ -32,12 +32,15 @@ public class ConstantNumber extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass) {
-        return "constructor_cls0("+this.getNUM()+")";
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
+        if (lastLine){
+            return "return constructor_cls0("+this.getNUM()+")";
+        }
+        else return "constructor_cls0("+this.getNUM()+")";
     }
 
-    @Override
+    /*@Override
     public String getTemps(Method method, Class aClass, String cclass, int i) {
         return "";
-    }
+    }*/
 }

@@ -8,7 +8,7 @@ public abstract class Expression {
 
     public abstract List<CSelector> collectMessages(List<CSelector> cselectors);
 
-    public abstract String compile(Method parameters, Class aClass, String cclass);
+    public abstract String compile(Method parameters, Class aClass, String cclass, Boolean lastLine);
 
-    public abstract String getTemps(Method method, Class aClass, String cclass, int i);
+    //public abstract String getTemps(Method method, Class aClass, String cclass, int i);
 }
