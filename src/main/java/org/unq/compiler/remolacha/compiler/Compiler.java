@@ -6,6 +6,7 @@ import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Program;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class Compiler {
 
     private List<CClass> cClasses = new ArrayList<>();
     private List<CSelector> cSelectors = new ArrayList<>();
-
+    private HashMap<String, String[]> table = new HashMap<>();
 
 
     public Compiler(Program program) {
@@ -41,10 +42,17 @@ public class Compiler {
         cSelectors = Collector.collectSelectors(program);
     }
 
+    private void generateTable() {
+        table = Collector.generateTable(program, cClasses, cSelectors);
+    }
+
     public void collect(){
         this.collectClasses();
         this.collectSelectors();
+        this.generateTable();
     }
+
+
 
     public void compile(){
         String code = "";
@@ -64,8 +72,12 @@ public class Compiler {
     }
 
     private String compileInitialization() {
+        int methodsSize = this.cSelectors.size();
         String ret ="void main () {\n";
-
+        ret += CodeHelper.getNativeInitializations(methodsSize);
+        for (String c : table.keySet()) {
+            ret+=CodeHelper.getInitialization(table.get(c), c, methodsSize);
+        }
         ret += "}\n";
         return ret;
     }

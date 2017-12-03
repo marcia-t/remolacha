@@ -8,6 +8,7 @@ import org.unq.compiler.remolacha.grammar.Method;
 import org.unq.compiler.remolacha.grammar.Program;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -95,7 +96,8 @@ public class Collector {
 
 
     /*
-    * Chequea si el método ya fue agregado a la lista de selectores*/
+    * Chequea si el método ya fue agregado a la lista de selectores
+    * */
     public static boolean exists(Method m, List<CSelector> cselectors) {
         for (CSelector cs :
                 cselectors) {
@@ -128,4 +130,33 @@ public class Collector {
         }
        return null;
     }
+
+    /*
+    * Retorna una tabla con los nombres de las clases compiladas y los métodos a los cuales
+    * responden
+    * TODO: ver para cada selector si está presente en el método.
+    * */
+    public static HashMap<String, String[]> generateTable(Program program, List<CClass> cClasses, List<CSelector> cSelectors) {
+        HashMap <String, String[]> result = new HashMap();
+        int size = cSelectors.size();
+        for (Class c : program.getClasses()){
+            String[] selectorsArray = new String[size];
+            String compiledName = Collector.getCClassName(cClasses, c.getId());
+            result.put(compiledName, selectorsArray);
+            for (CSelector cs : cSelectors){
+                if (c.existsMethod(cs)){
+                    int l = Collector.getLocation(cs);
+                    selectorsArray[l] = cs.getId();
+                }
+            }
+        }
+        return result;
+    }
+
+    private static int getLocation(CSelector cs) {
+        String num = cs.getId().substring(3);
+        return Integer.valueOf(num);
+    }
+
+
 }
