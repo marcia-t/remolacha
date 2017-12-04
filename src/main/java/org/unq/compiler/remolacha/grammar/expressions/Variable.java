@@ -5,6 +5,7 @@ import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Variable extends Expression {
@@ -29,11 +30,12 @@ public class Variable extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table) {
         /*ver si ID forma parte de los parámetros o de las vars de la clase*/
         String compiled = "";
         for (int i = 0; i < aClass.getLocals().size(); i++) {
             if (aClass.getLocals().get(i).getId().equals(this.getID())) {
+
                 compiled += "PTR_TO_OBJECT(o0->varsInstancia[" + i + "])";
             }
         }

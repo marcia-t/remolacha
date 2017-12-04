@@ -7,6 +7,7 @@ import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -69,10 +70,22 @@ public class Send extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table) {
         String ret = "";
-        for (int i = 0; i < aClass.getLocals().size(); i++) {
+
+        String sender = this.expr.compile(method, aClass, cclass, false, table);
+        //ID es el mensaje que tengo que buscar entre los selectores o en la tabla.
+
+        if (lastLine){
+            return "return "+ ret;
+        }
+        else return ret;
+    }
+
+    /*
+    *        for (int i = 0; i < aClass.getLocals().size(); i++) {
             if (aClass.getLocals().get(i).getId().equals(this.getID())) {
+
                 ret += "o0->varsInstancia[" + i + "]"; //a esto, send los args
             }
         }
@@ -81,13 +94,10 @@ public class Send extends Expression {
                 ret += "o" + i+1; //a esto, send los args
             }
         }
-        ret += this.getExpr().compile(method, aClass, cclass, false);
+        ret += this.getExpr().compile(method, aClass, cclass, false, table);
 
-        if (lastLine){
-            return "return "+ ret;
-        }
-        else return ret;
-    }
+    *
+    * */
 
    /* @Override
     public String getTemps(Method method, Class aClass, String cclass, int j) {

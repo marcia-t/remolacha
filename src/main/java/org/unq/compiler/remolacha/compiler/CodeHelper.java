@@ -8,6 +8,7 @@ import org.unq.compiler.remolacha.grammar.Method;
 import org.unq.compiler.remolacha.grammar.expressions.Send;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -120,29 +121,29 @@ public class CodeHelper {
         return constructor;
     }
 
-    public static String compileMethods(Class aClass, List<CClass> cClasses, List<CSelector> cSelectors) {
+    public static String compileMethods(Class aClass, List<CClass> cClasses, List<CSelector> cSelectors, HashMap<String, String[]> table) {
         List<Method> methods = aClass.getMethods();
         String compiledMethods = "";
         String cclass = Collector.getCClassName(cClasses, aClass.getId());
         for (Method m : methods){
-            compiledMethods += CodeHelper.compileMethod(aClass, m, cclass,  cSelectors);
+            compiledMethods += CodeHelper.compileMethod(aClass, m, cclass,  cSelectors, table);
         }
         return compiledMethods;
     }
 
-    private static String compileMethod(Class aClass, Method m, String cclass, List<CSelector> cSelectors) {
+    private static String compileMethod(Class aClass, Method m, String cclass, List<CSelector> cSelectors, HashMap<String, String[]> table) {
         String declaration = "/*"+cclass+ "=>"+aClass.getId()+"," +m.getId()+"*/\n";
         declaration+= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
 
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
         declaration+= "/*"+aClass.getId()+"*/\n";
-        declaration += CodeHelper.compileExpressions(aClass, m, cclass);
+        declaration += CodeHelper.compileExpressions(aClass, m, cclass, table);
         declaration += "}\n";
         return declaration;
     }
 
-    private static String compileExpressions(Class aClass, Method method, String cclass) {
+    private static String compileExpressions(Class aClass, Method method, String cclass, HashMap<String, String[]> table) {
         String block = "";
         Boolean lastLine = false;
        /* for (Expression e: method.getBlock()){
@@ -153,7 +154,7 @@ public class CodeHelper {
                 lastLine = true;
             }
             Expression e = method.getBlock().get(i);
-            block += e.compile(method, aClass, cclass, lastLine);
+            block += e.compile(method, aClass, cclass, lastLine, table);
             block += ";\n";
 
         }
@@ -189,38 +190,38 @@ public class CodeHelper {
     }
 
     public static String getInitialization(String[] strings, String c, int methodsSize) {
-        String ret = c +" = new Clase;\n";
+        String ret = "    "+c +" = new Clase;\n";
         String size = String.valueOf(Integer.valueOf(methodsSize));
-        ret += c+"->metodos = new PTR ["+size+"];\n";
+        ret += "    "+c+"->metodos = new PTR ["+size+"];\n";
         for (int i = 0; i < methodsSize; i++) {
             if (strings[i]== null){
-                ret+= c+"metodos["+i+"] = NULL;\n";
+                ret+= "    "+c+"metodos["+i+"] = NULL;\n";
             }
             else {
-                ret+= c+"metodos["+i+"] = METHOD_TO_PTR(met_"+c+"_"+strings[i]+");\n";
+                ret+= "    "+c+"metodos["+i+"] = METHOD_TO_PTR(met_"+c+"_"+strings[i]+");\n";
             }
         }
         return ret;
     }
 
     public static String getNativeInitializations(int methodsSize) {
-        String ret = "/* Inicialización de la clase cls0 ( Int ) */\n" +
-                "cls0 = new Clase;\n" +
-                "cls0->nombre = \"Int\";\n" +
-                "cls0->metodos = new PTR[7];\n" +
-                "cls0->metodos[0] = METHOD_TO_PTR(met_cls0_sel0); /* print/0 */\n" +
-                "cls0->metodos[1] = METHOD_TO_PTR(met_cls0_sel1); /* add/1 */\n" ;
+        String ret = "    /* Inicialización de la clase cls0 ( Int ) */\n" +
+                "    cls0 = new Clase;\n" +
+                "    cls0->nombre = \"Int\";\n" +
+                "    cls0->metodos = new PTR[7];\n" +
+                "    cls0->metodos[0] = METHOD_TO_PTR(met_cls0_sel0); /* print/0 */\n" +
+                "    cls0->metodos[1] = METHOD_TO_PTR(met_cls0_sel1); /* add/1 */\n" ;
         for (int i = 2; i < methodsSize; i++) {
-            ret += "cls0->metodos["+i+"] = NULL;\n";
+            ret += "    cls0->metodos["+i+"] = NULL;\n";
         }
-        ret+=   "/* Inicialización de la clase cls1 ( String ) */\n" +
-                "cls1 = new Clase;\n" +
-                "cls1->nombre = \"String\";\n" +
-                "cls1->metodos = new PTR[7];\n" +
-                "cls1->metodos[0] = METHOD_TO_PTR(met_cls1_sel0); /* print/0 */\n" +
-                "cls1->metodos[1] = METHOD_TO_PTR(met_cls1_sel1); /* add/1 */\n";
+        ret+=   "    /* Inicialización de la clase cls1 ( String ) */\n" +
+                "    cls1 = new Clase;\n" +
+                "    cls1->nombre = \"String\";\n" +
+                "    cls1->metodos = new PTR[7];\n" +
+                "    cls1->metodos[0] = METHOD_TO_PTR(met_cls1_sel0); /* print/0 */\n" +
+                "    cls1->metodos[1] = METHOD_TO_PTR(met_cls1_sel1); /* add/1 */\n";
         for (int i = 2; i < methodsSize; i++) {
-            ret += "cls1->metodos["+i+"] = NULL;\n";
+            ret += "    cls1->metodos["+i+"] = NULL;\n";
         }
 
         return ret;

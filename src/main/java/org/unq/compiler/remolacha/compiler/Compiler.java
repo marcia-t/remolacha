@@ -91,7 +91,7 @@ public class Compiler {
         String methods = "";
         for (int i = 0; i < program.getClasses().size(); i++) {
             Class aClass = program.getClasses().get(i);
-            methods += CodeHelper.compileMethods(aClass, cClasses, cSelectors);
+            methods += CodeHelper.compileMethods(aClass, cClasses, cSelectors, table);
         }
         return methods;
     }

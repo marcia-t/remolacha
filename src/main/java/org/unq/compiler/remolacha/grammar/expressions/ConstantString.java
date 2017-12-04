@@ -5,6 +5,7 @@ import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class ConstantString extends Expression{
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table) {
         if (lastLine) {
             return "return constructor_cls1(\""+this.getSTRING()+"\")";
         }

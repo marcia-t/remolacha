@@ -134,7 +134,6 @@ public class Collector {
     /*
     * Retorna una tabla con los nombres de las clases compiladas y los métodos a los cuales
     * responden
-    * TODO: ver para cada selector si está presente en el método.
     * */
     public static HashMap<String, String[]> generateTable(Program program, List<CClass> cClasses, List<CSelector> cSelectors) {
         HashMap <String, String[]> result = new HashMap();
