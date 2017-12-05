@@ -1,5 +1,7 @@
 package org.unq.compiler.remolacha.grammar;
 
+import org.unq.compiler.remolacha.compiler.utils.CSelector;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,5 +51,18 @@ public class Class {
 
     public void addLocalVar(LocalVar lv){
         this.locals.add(lv);
+    }
+
+    public int localsSize(){
+        return locals.size();
+    }
+
+    public boolean existsMethod(CSelector cs) {
+        for (Method m: this.getMethods()){
+            if (m.getId().equals(cs.getName()) && cs.getArgs() == m.getParameters().size()){
+                 return  true;
+            }
+        }
+        return false;
     }
 }

@@ -1,8 +1,10 @@
 package org.unq.compiler.remolacha.app;
-import org.unq.compiler.remolacha.compiler.CodeHelper;
+import org.unq.compiler.remolacha.compiler.Compiler;
+import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.*;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.expressions.*;
+import org.unq.compiler.remolacha.compiler.utils.CClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +93,7 @@ public class App {
         contador.addMethod(valorActual);
 
 
-        /*Variables de main*/
+        /*Variables de clase main*/
         List<LocalVar> mainLocals = new ArrayList<LocalVar>();
         LocalVar c = new LocalVar("c");
 
@@ -100,7 +102,7 @@ public class App {
         /*Métodos de main*/
         Method mainM = new Method("main");
 
-        /*Bloque de main*/
+        /*Bloque de método main*/
         List<Expression> blockMain = new ArrayList<>();
         /*Expresiones de línea 1*/
         /*set c = new Contador . inicializar (0)*/
@@ -137,6 +139,7 @@ public class App {
         List<Expression> lArg2 = new ArrayList<>();
         lArg2.add(n2);
         Send e20 =  new Send(c2, "incrementarEn", lArg2);
+        //Send e20 =  new Send(c2, "incrementarEn PEPE", lArg2);
         Send e21 = new Send(e20, "valorActual");
         Send e22 = new Send(e21, "print");
 
@@ -144,9 +147,17 @@ public class App {
         mainM.setBlock(blockMain);
         main.addMethod(mainM);
 
+        List<Class> classes = new ArrayList<>();
+        classes.add(main);
+        classes.add(contador);
+        Program p = new Program(classes);
 
-        CodeHelper ch = new CodeHelper();
-        ch.print();
+        Compiler comp = new Compiler(p);
+
+        comp.compile();
+
+
+
 
 
     }
