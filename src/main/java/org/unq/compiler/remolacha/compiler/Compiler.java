@@ -78,6 +78,7 @@ public class Compiler {
         for (String c : table.keySet()) {
             ret+=CodeHelper.getInitialization(table.get(c), c, methodsSize);
         }
+        ret += "    return 0;\n";
         ret += "}\n";
         return ret;
     }

@@ -74,12 +74,12 @@ public class Send extends Expression {
     public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
         String ret = "";
         String args ="";
-        String receiver = this.getExpr().compile(method,aClass,cclass,lastLine,table,cSelectors);
+        String receiver = this.getExpr().compile(method,aClass,cclass,false,table,cSelectors);
 
         String tmp = Environment.assignAndReturn(receiver);
 
         for (Expression e : this.getArguments()) {
-            String arg =e.compile(method,aClass,cclass,lastLine,table,cSelectors);
+            String arg =e.compile(method,aClass,cclass,false,table,cSelectors);
             String t = Environment.assignAndReturn(arg);
             args+=", "+t;
         }
@@ -87,6 +87,11 @@ public class Send extends Expression {
         String selector = Collector.getSelectorIdByMessage(this.getID(), this.getArguments().size(), cSelectors);
         int nbr = Integer.parseInt(selector.substring(3));
 
+        /*if (!lastLine){
+            String t1 = Environment.getNext();
+            String assign = "Objeto* "+t1+"= ";
+            ret = assign+ret;
+        }*/
         ret += "PTR_TO_METHOD("+tmp+"->clase->metodos["+nbr+"])("+tmp+args+")";
         return ret;
     }
