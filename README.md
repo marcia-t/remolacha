@@ -8,4 +8,17 @@ consiste en implementar el generador de código para compilar el lenguaje Remola
 
 ##### Observaciones
 ###### Environment
+Se trabajó con el concepto de entorno aprendido en clase.
+
+###### Sobre los set
+Se asume que dentro de la asignación de un set no hay otro set
+
+Ejemplo:
+
+`set x = y.send(set j = p)`
+
+o:
+
+`set x = set j = p`
+
 

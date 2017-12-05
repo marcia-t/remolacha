@@ -64,63 +64,7 @@ public class CodeHelper {
         return classes;
     }
 
-    public static String getNativeClassesDef (){
-        return "/* Construye un objeto de clase Int */\n" +
-                "Objeto* constructor_cls0 (Num valor) {\n" +
-                "   Objeto* obj = new Objeto ;\n" +
-                "   obj -> clase = cls0 ; /* Int */\n" +
-                "   obj -> varsInstancia = new PTR [1];\n" +
-                "   obj -> varsInstancia[0] = NUM_TO_PTR (valor);\n" +
-                "   return obj ;\n" +
-                " }\n" +
-                "/* Construye un objeto de clase String */\n" +
-                "Objeto* constructor_cls1 ( String valor ) {\n" +
-                "   Objeto* obj = new Objeto ;\n" +
-                "   obj -> clase = cls1 ; /* String */\n" +
-                "   obj -> varsInstancia = new PTR [1];\n" +
-                "   obj -> varsInstancia[0] = STRING_TO_PTR (valor);\n" +
-                "   return obj ;\n" +
-                "}\n" +
-                "Objeto* met_cls0_sel0(Objeto* o0) {\n" +
-                "  cout << PTR_TO_NUM(o0->varsInstancia[0]) << endl;\n" +
-                "  return o0;\n" +
-                "}\n" +
-                "\n" +
-                "Objeto* met_cls0_sel1(Objeto* o0, Objeto* o1) {\n" +
-                "  Num n1 = PTR_TO_NUM(o0->varsInstancia[0]);\n" +
-                "  Num n2 = PTR_TO_NUM(o1->varsInstancia[0]);\n" +
-                "  return constructor_cls0(n1 + n2);\n" +
-                "}\n" +
-                "\n" +
-                "Objeto* met_cls1_sel0(Objeto* o0) {\n" +
-                "  cout << PTR_TO_STRING(o0->varsInstancia[0]) << endl;\n" +
-                "  return o0;\n" +
-                "}\n" +
-                "\n" +
-                "Objeto* met_cls1_sel1(Objeto* o0, Objeto* o1) {\n" +
-                "  String s1 = PTR_TO_STRING(o0->varsInstancia[0]);\n" +
-                "  String s2 = PTR_TO_STRING(o1->varsInstancia[0]);\n" +
-                "  string str1(s1);\n" +
-                "  string str2(s2);\n" +
-                "  const char* result = (str1 + str2).c_str();\n" +
-                "  return constructor_cls1(result);\n" +
-                "}\n";
-    }
 
-    public static String getClassConstructor(Class cl, String id) {
-        String varsInstancia = "";
-        for (int i = 0; i < cl.localsSize(); i++) {
-            varsInstancia +="   obj -> varsInstancia["+i+"] = constructor_cls0 (0);\n";
-        }
-        String constructor = "Objeto* constructor_"+id+"() {\n" +
-                                "   Objeto* obj = new Objeto;\n" +
-                                "   obj -> clase = "+id+";\n" +
-                                "   obj -> varsInstancia = new PTR ["+cl.localsSize()+"];\n"
-                                +varsInstancia+
-                                "   return obj;\n" +
-                "} ";
-        return constructor;
-    }
 
     public static String compileMethods(Class aClass, List<CClass> cClasses, List<CSelector> cSelectors, HashMap<String, String[]> table) {
         List<Method> methods = aClass.getMethods();
@@ -139,7 +83,7 @@ public class CodeHelper {
         declaration+= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
-        declaration+= "/*"+aClass.getId()+"*/\n";
+        //declaration+= "/*"+aClass.getId()+"*/\n";
         declaration += CodeHelper.compileExpressions(aClass, m, cclass, table, cSelectors);
         declaration += "}\n";
         return declaration;
@@ -154,9 +98,10 @@ public class CodeHelper {
             }
             Expression e = method.getBlock().get(i);
             block += e.compile(method, aClass, cclass, lastLine, table, cSelectors);
-            block += ";\n";
+            block += "; \n";
         }
-        return block;
+
+        return Environment.getEnv()+" \n "+modifyLastLine(block);
     }
 
     private static String modifyLastLine(String block) {
@@ -223,5 +168,63 @@ public class CodeHelper {
         }
 
         return ret;
+    }
+
+    public static String getNativeClassesDef (){
+        return "/* Construye un objeto de clase Int */\n" +
+                "Objeto* constructor_cls0 (Num valor) {\n" +
+                "   Objeto* obj = new Objeto ;\n" +
+                "   obj -> clase = cls0 ; /* Int */\n" +
+                "   obj -> varsInstancia = new PTR [1];\n" +
+                "   obj -> varsInstancia[0] = NUM_TO_PTR (valor);\n" +
+                "   return obj ;\n" +
+                " }\n" +
+                "/* Construye un objeto de clase String */\n" +
+                "Objeto* constructor_cls1 ( String valor ) {\n" +
+                "   Objeto* obj = new Objeto ;\n" +
+                "   obj -> clase = cls1 ; /* String */\n" +
+                "   obj -> varsInstancia = new PTR [1];\n" +
+                "   obj -> varsInstancia[0] = STRING_TO_PTR (valor);\n" +
+                "   return obj ;\n" +
+                "}\n" +
+                "Objeto* met_cls0_sel0(Objeto* o0) {\n" +
+                "  cout << PTR_TO_NUM(o0->varsInstancia[0]) << endl;\n" +
+                "  return o0;\n" +
+                "}\n" +
+                "\n" +
+                "Objeto* met_cls0_sel1(Objeto* o0, Objeto* o1) {\n" +
+                "  Num n1 = PTR_TO_NUM(o0->varsInstancia[0]);\n" +
+                "  Num n2 = PTR_TO_NUM(o1->varsInstancia[0]);\n" +
+                "  return constructor_cls0(n1 + n2);\n" +
+                "}\n" +
+                "\n" +
+                "Objeto* met_cls1_sel0(Objeto* o0) {\n" +
+                "  cout << PTR_TO_STRING(o0->varsInstancia[0]) << endl;\n" +
+                "  return o0;\n" +
+                "}\n" +
+                "\n" +
+                "Objeto* met_cls1_sel1(Objeto* o0, Objeto* o1) {\n" +
+                "  String s1 = PTR_TO_STRING(o0->varsInstancia[0]);\n" +
+                "  String s2 = PTR_TO_STRING(o1->varsInstancia[0]);\n" +
+                "  string str1(s1);\n" +
+                "  string str2(s2);\n" +
+                "  const char* result = (str1 + str2).c_str();\n" +
+                "  return constructor_cls1(result);\n" +
+                "}\n";
+    }
+
+    public static String getClassConstructor(Class cl, String id) {
+        String varsInstancia = "";
+        for (int i = 0; i < cl.localsSize(); i++) {
+            varsInstancia +="   obj -> varsInstancia["+i+"] = constructor_cls0 (0);\n";
+        }
+        String constructor = "Objeto* constructor_"+id+"() {\n" +
+                "   Objeto* obj = new Objeto;\n" +
+                "   obj -> clase = "+id+";\n" +
+                "   obj -> varsInstancia = new PTR ["+cl.localsSize()+"];\n"
+                +varsInstancia+
+                "   return obj;\n" +
+                "} ";
+        return constructor;
     }
 }

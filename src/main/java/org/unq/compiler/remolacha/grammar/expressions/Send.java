@@ -73,56 +73,21 @@ public class Send extends Expression {
     @Override
     public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
         String ret = "";
-        String env = "";
-        ret+= this.getExpr().compile(method,aClass,cclass,lastLine,table,cSelectors);
-        //la línea anterior modifica el environment.
-        //este método debería devolver  PTR_TO_METHOD(tmp3->clase->metodos[15])(tmp3);
-        //siendo cls3 a quién le tengo que enviar el mensaje
-        //Environment.getCompiled(this.getExpr());
+        String args ="";
+        String receiver = this.getExpr().compile(method,aClass,cclass,lastLine,table,cSelectors);
 
-        for (Expression e :
-                this.getArguments()) {
-            env+=e.compile(method,aClass,cclass,lastLine,table,cSelectors);
+        String tmp = Environment.assignAndReturn(receiver);
+
+        for (Expression e : this.getArguments()) {
+            String arg =e.compile(method,aClass,cclass,lastLine,table,cSelectors);
+            String t = Environment.assignAndReturn(arg);
+            args+=", "+t;
         }
 
         String selector = Collector.getSelectorIdByMessage(this.getID(), this.getArguments().size(), cSelectors);
         int nbr = Integer.parseInt(selector.substring(3));
 
-
-
-        if (lastLine){
-            return "return "+ ret;
-        }
-        else return ret;
-    }
-
-    /*
-    *        for (int i = 0; i < aClass.getLocals().size(); i++) {
-            if (aClass.getLocals().get(i).getId().equals(this.getID())) {
-
-                ret += "o0->varsInstancia[" + i + "]"; //a esto, send los args
-            }
-        }
-        for (int i = 0; i < method.getParameters().size(); i++) {
-            if (this.getID().equals(method.getParameters().get(i))) {
-                ret += "o" + i+1; //a esto, send los args
-            }
-        }
-        ret += this.getExpr().compile(method, aClass, cclass, false, table);
-
-    *
-    * */
-
-   /* @Override
-    public String getTemps(Method method, Class aClass, String cclass, int j) {
-        String ret = "";
-        for (int i = 0; i < this.getArguments().size(); i++) {
-            Expression e = this.getArguments().get(i);
-            j++;
-            ret+= "Objeto* tmp"+j+"= "+ e.compile(method, aClass, cclass) +"\n";
-            ret+= e.getTemps(method, aClass, cclass, j);
-        }
-
+        ret += "PTR_TO_METHOD("+tmp+"->clase->metodos["+nbr+"])("+tmp+args+")";
         return ret;
-    }*/
+    }
 }

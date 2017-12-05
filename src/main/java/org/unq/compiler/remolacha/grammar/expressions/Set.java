@@ -1,5 +1,6 @@
 package org.unq.compiler.remolacha.grammar.expressions;
 
+import org.unq.compiler.remolacha.compiler.context.Environment;
 import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Expression;
@@ -43,6 +44,9 @@ public class Set extends Expression {
     @Override
     public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
         String ret = "";
+
+        String assign = this.getExpr().compile(method, aClass, cclass, false, table, cSelectors);
+
         for (int i = 0; i < aClass.getLocals().size(); i++) {
             if (aClass.getLocals().get(i).getId().equals(this.getID())) {
                 ret += "o0->varsInstancia[" + i + "] =";
@@ -53,18 +57,10 @@ public class Set extends Expression {
                 ret += "o" + i+1 + " =";
             }
         }
-        ret += this.getExpr().compile(method, aClass, cclass, false, table, cSelectors);
 
-        if (lastLine){
-            return "return constructor_cls0(0)";
+       if (lastLine){
+            return ret+assign+"\nconstructor_cls0(0)";
         }
-        else return ret;
+        else return ret+assign;
     }
-
-   /* @Override
-    public String getTemps(Method method, Class aClass, String cclass, int i) {
-        return expr.getTemps(method, aClass, cclass, i);
-    }*/
-
-
 }

@@ -34,10 +34,7 @@ public class New extends Expression {
 
     @Override
     public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
-        if (lastLine){
-            return "return constructor_"+cclass+"()";
-        }
-        else return "constructor_"+cclass+"()";
+        return "constructor_"+cclass+"()";
     }
 
     /*@Override

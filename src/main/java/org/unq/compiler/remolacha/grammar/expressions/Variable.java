@@ -46,10 +46,7 @@ public class Variable extends Expression {
                 compiled += "o" + n;
             }
         }
-        if (lastLine){
-            return "return "+compiled;
-        }
-        else return compiled;
+        return compiled;
     }
 
     /*@Override
