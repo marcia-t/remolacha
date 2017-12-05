@@ -19,7 +19,7 @@ public class Self extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
         if (lastLine){
             return "return o0";
         }

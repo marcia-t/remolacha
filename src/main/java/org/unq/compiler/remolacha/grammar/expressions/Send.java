@@ -1,6 +1,7 @@
 package org.unq.compiler.remolacha.grammar.expressions;
 
 import org.unq.compiler.remolacha.compiler.Collector;
+import org.unq.compiler.remolacha.compiler.context.Environment;
 import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Expression;
@@ -70,11 +71,24 @@ public class Send extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
         String ret = "";
+        String env = "";
+        ret+= this.getExpr().compile(method,aClass,cclass,lastLine,table,cSelectors);
+        //la línea anterior modifica el environment.
+        //este método debería devolver  PTR_TO_METHOD(tmp3->clase->metodos[15])(tmp3);
+        //siendo cls3 a quién le tengo que enviar el mensaje
+        //Environment.getCompiled(this.getExpr());
 
-        String sender = this.expr.compile(method, aClass, cclass, false, table);
-        //ID es el mensaje que tengo que buscar entre los selectores o en la tabla.
+        for (Expression e :
+                this.getArguments()) {
+            env+=e.compile(method,aClass,cclass,lastLine,table,cSelectors);
+        }
+
+        String selector = Collector.getSelectorIdByMessage(this.getID(), this.getArguments().size(), cSelectors);
+        int nbr = Integer.parseInt(selector.substring(3));
+
+
 
         if (lastLine){
             return "return "+ ret;

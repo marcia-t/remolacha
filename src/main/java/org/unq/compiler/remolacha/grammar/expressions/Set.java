@@ -41,7 +41,7 @@ public class Set extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
         String ret = "";
         for (int i = 0; i < aClass.getLocals().size(); i++) {
             if (aClass.getLocals().get(i).getId().equals(this.getID())) {
@@ -53,7 +53,7 @@ public class Set extends Expression {
                 ret += "o" + i+1 + " =";
             }
         }
-        ret += this.getExpr().compile(method, aClass, cclass, false, table);
+        ret += this.getExpr().compile(method, aClass, cclass, false, table, cSelectors);
 
         if (lastLine){
             return "return constructor_cls0(0)";

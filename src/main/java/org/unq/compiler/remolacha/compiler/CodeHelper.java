@@ -1,5 +1,6 @@
 package org.unq.compiler.remolacha.compiler;
 
+import org.unq.compiler.remolacha.compiler.context.Environment;
 import org.unq.compiler.remolacha.compiler.utils.CClass;
 import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
@@ -128,35 +129,32 @@ public class CodeHelper {
         for (Method m : methods){
             compiledMethods += CodeHelper.compileMethod(aClass, m, cclass,  cSelectors, table);
         }
+        Environment.clean();
         return compiledMethods;
     }
 
     private static String compileMethod(Class aClass, Method m, String cclass, List<CSelector> cSelectors, HashMap<String, String[]> table) {
+        Environment.clean();
         String declaration = "/*"+cclass+ "=>"+aClass.getId()+"," +m.getId()+"*/\n";
         declaration+= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
-
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
         declaration+= "/*"+aClass.getId()+"*/\n";
-        declaration += CodeHelper.compileExpressions(aClass, m, cclass, table);
+        declaration += CodeHelper.compileExpressions(aClass, m, cclass, table, cSelectors);
         declaration += "}\n";
         return declaration;
     }
 
-    private static String compileExpressions(Class aClass, Method method, String cclass, HashMap<String, String[]> table) {
+    private static String compileExpressions(Class aClass, Method method, String cclass, HashMap<String, String[]> table, List<CSelector> cSelectors) {
         String block = "";
         Boolean lastLine = false;
-       /* for (Expression e: method.getBlock()){
-            block += e.getTemps(method, aClass, cclass, 0);
-        }*/
         for (int i = 0; i < method.getBlock().size(); i++) {
             if (i == method.getBlock().size()-1){
                 lastLine = true;
             }
             Expression e = method.getBlock().get(i);
-            block += e.compile(method, aClass, cclass, lastLine, table);
+            block += e.compile(method, aClass, cclass, lastLine, table, cSelectors);
             block += ";\n";
-
         }
         return block;
     }

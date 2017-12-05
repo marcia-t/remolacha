@@ -158,4 +158,16 @@ public class Collector {
     }
 
 
+    /*
+    * Se usa siempre después de preguntar que un método exista, de todos modos siempre existe porque se chequea antes de compilar
+    * */
+    public static String getSelectorIdByMessage(String id, int size, List<CSelector> cSelectors) {
+        for (CSelector cs :
+                cSelectors) {
+            if (id.equals(cs.getName()) && size == cs.getArgs()){
+                return cs.getId();
+            }
+        }
+        return "";
+    }
 }
