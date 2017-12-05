@@ -15,6 +15,10 @@ public class Method {
         this.block = block;
     }
 
+    public Method(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
