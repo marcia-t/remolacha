@@ -1,6 +1,11 @@
 package org.unq.compiler.remolacha.compiler.context;
 
+import org.unq.compiler.remolacha.compiler.Collector;
+import org.unq.compiler.remolacha.compiler.Compiler;
+import org.unq.compiler.remolacha.grammar.expressions.Send;
+
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 /*
 * Clase que va a manejar el entorno de los objetos
@@ -29,6 +34,7 @@ public class Environment {
     }
 
 
+
     public static String getEnv() {
         return env;
     }
@@ -40,8 +46,36 @@ public class Environment {
         }
         else {
             String tmpN = Environment.getNext();
+
             env+="Objeto* "+tmpN+" = "+assignment+";\n";
             assignments.put(assignment, tmpN);
+            return tmpN;
+        }
+    }
+
+    /*Se sabe que siempre va a ser un Send*/
+    public static void generateChecker(String assignment, Send send) {
+        String msj = send.getID() + "/" +send.getArguments().size();
+        String met = assignment.substring(14);
+        met = met.substring(0, met.indexOf(']')+1);
+        String ret = "if ("+met+" == NULL) {\n" +
+                "   fprintf(stderr,\"El objeto no acepta el mensaje ’"+msj+"’.\\n\");\n" +
+                "   exit(1);\n" +
+                "}\n";
+        env += ret;
+    }
+
+    public static String assignAndReturnWCheck(String assignment, Send expr) {
+        if (assignments.containsKey(assignment)){
+            return assignments.get(assignment);
+        }
+        else {
+            String tmpN = Environment.getNext();
+
+
+            assignments.put(assignment, tmpN);
+            generateChecker(assignment, expr);
+            env+="Objeto* "+tmpN+" = "+assignment+";\n";
             return tmpN;
         }
     }

@@ -30,7 +30,7 @@ public class Variable extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
         /*ver si ID forma parte de los parámetros o de las vars de la clase*/
         String compiled = "";
         for (int i = 0; i < aClass.getLocals().size(); i++) {
