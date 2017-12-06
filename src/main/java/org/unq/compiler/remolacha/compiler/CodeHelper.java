@@ -6,9 +6,7 @@ import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
-import org.unq.compiler.remolacha.grammar.expressions.Send;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,9 +18,12 @@ public class CodeHelper {
     private static final String header =
             "#include <cstdlib>\n" +
             "#include <cstdio>\n" +
+            "#include <iostream>\n" +
+            "#include <stdlib.h>\n" +
             "typedef unsigned long long int Num;\n" +
-            "typedef char* String;\n" +
+            "typedef const char* String;\n" +
             "typedef void* PTR;\n" +
+            "using namespace std;\n" +
             "struct Clase {\n" +
             "   PTR* metodos;\n" +
             "};\n" +
@@ -83,7 +84,6 @@ public class CodeHelper {
         declaration+= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
-        //declaration+= "/*"+aClass.getId()+"*/\n";
         declaration += CodeHelper.compileExpressions(aClass, m, cclass, table, cSelectors);
         declaration += "}\n";
         return declaration;
@@ -109,7 +109,7 @@ public class CodeHelper {
         split[split.length-1] = "return " +split[split.length-1];
         String ret = "";
         for (int i = 0; i < split.length; i++) {
-            ret += split[i];
+            ret += split[i] + "\n";
         }
         return ret;
     }
@@ -138,10 +138,10 @@ public class CodeHelper {
         ret += "    "+c+"->metodos = new PTR ["+size+"];\n";
         for (int i = 0; i < methodsSize; i++) {
             if (strings[i]== null){
-                ret+= "    "+c+"metodos["+i+"] = NULL;\n";
+                ret+= "    "+c+"->metodos["+i+"] = NULL;\n";
             }
             else {
-                ret+= "    "+c+"metodos["+i+"] = METHOD_TO_PTR(met_"+c+"_"+strings[i]+");\n";
+                ret+= "    "+c+"->metodos["+i+"] = METHOD_TO_PTR(met_"+c+"_"+strings[i]+");\n";
             }
         }
         return ret;
@@ -150,7 +150,6 @@ public class CodeHelper {
     public static String getNativeInitializations(int methodsSize) {
         String ret = "    /* Inicialización de la clase cls0 ( Int ) */\n" +
                 "    cls0 = new Clase;\n" +
-                "    cls0->nombre = \"Int\";\n" +
                 "    cls0->metodos = new PTR[7];\n" +
                 "    cls0->metodos[0] = METHOD_TO_PTR(met_cls0_sel0); /* print/0 */\n" +
                 "    cls0->metodos[1] = METHOD_TO_PTR(met_cls0_sel1); /* add/1 */\n" ;
@@ -159,7 +158,6 @@ public class CodeHelper {
         }
         ret+=   "    /* Inicialización de la clase cls1 ( String ) */\n" +
                 "    cls1 = new Clase;\n" +
-                "    cls1->nombre = \"String\";\n" +
                 "    cls1->metodos = new PTR[7];\n" +
                 "    cls1->metodos[0] = METHOD_TO_PTR(met_cls1_sel0); /* print/0 */\n" +
                 "    cls1->metodos[1] = METHOD_TO_PTR(met_cls1_sel1); /* add/1 */\n";

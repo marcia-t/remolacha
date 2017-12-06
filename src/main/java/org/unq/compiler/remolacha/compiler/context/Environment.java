@@ -6,7 +6,7 @@ import java.util.HashMap;
 * Clase que va a manejar el entorno de los objetos
 * temporales en cada método que se vaya a compilar.
 * También tiene la lista de objetos temporales
-* next es el nro de parámetro que se usará próximo
+* next es el nro de parámetro tmp que se usará próximo
 * */
 public class Environment {
 
@@ -40,7 +40,7 @@ public class Environment {
         }
         else {
             String tmpN = Environment.getNext();
-            env+="Objeto* "+tmpN+" ="+assignment+";\n";
+            env+="Objeto* "+tmpN+" = "+assignment+";\n";
             assignments.put(assignment, tmpN);
             return tmpN;
         }
