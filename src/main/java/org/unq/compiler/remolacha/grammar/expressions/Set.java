@@ -59,7 +59,7 @@ public class Set extends Expression {
         }
 
        if (lastLine){
-            return ret+assign+"\n constructor_cls0(0)";
+            return ret+assign+";\n constructor_cls0(0)";
         }
         else return ret+assign;
     }

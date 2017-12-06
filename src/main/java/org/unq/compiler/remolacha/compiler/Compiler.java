@@ -73,7 +73,7 @@ public class Compiler {
 
     private String compileInitialization() {
         int methodsSize = this.cSelectors.size();
-        String ret ="void main () {\n";
+        String ret ="int main () {\n";
         ret += CodeHelper.getNativeInitializations(methodsSize);
         for (String c : table.keySet()) {
             ret+=CodeHelper.getInitialization(table.get(c), c, methodsSize);

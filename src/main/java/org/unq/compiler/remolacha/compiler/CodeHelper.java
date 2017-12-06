@@ -18,9 +18,12 @@ public class CodeHelper {
     private static final String header =
             "#include <cstdlib>\n" +
             "#include <cstdio>\n" +
+            "#include <iostream>\n" +
+            "#include <stdlib.h>\n" +
             "typedef unsigned long long int Num;\n" +
-            "typedef char* String;\n" +
+            "typedef const char* String;\n" +
             "typedef void* PTR;\n" +
+            "using namespace std;\n" +
             "struct Clase {\n" +
             "   PTR* metodos;\n" +
             "};\n" +
