@@ -6,6 +6,8 @@ import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
+import org.unq.compiler.remolacha.grammar.Program;
+import org.unq.compiler.remolacha.grammar.expressions.Send;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,9 +48,6 @@ public class CodeHelper {
         return header;
     }
 
-    public static void print(){
-        System.out.println(getHeader());
-    }
 
 
     /*
@@ -66,7 +65,9 @@ public class CodeHelper {
     }
 
 
-
+    /*
+    * compilar todos los métodos de una clase.
+    * */
     public static String compileMethods(Class aClass, List<CClass> cClasses, List<CSelector> cSelectors, HashMap<String, String[]> table) {
         List<Method> methods = aClass.getMethods();
         String compiledMethods = "";
@@ -78,6 +79,9 @@ public class CodeHelper {
         return compiledMethods;
     }
 
+    /*
+    * Compilar un método
+    * */
     private static String compileMethod(Class aClass, Method m, String cclass, List<CSelector> cSelectors, HashMap<String, String[]> table) {
         Environment.clean();
         String declaration = "/*"+cclass+ "=>"+aClass.getId()+"," +m.getId()+"*/\n";
@@ -89,21 +93,49 @@ public class CodeHelper {
         return declaration;
     }
 
+    /*
+    * Compilar todas las expresiones de un bloque
+    * */
     private static String compileExpressions(Class aClass, Method method, String cclass, HashMap<String, String[]> table, List<CSelector> cSelectors) {
         String block = "";
         Boolean lastLine = false;
+        String compiled = "";
+        String check = "";
         for (int i = 0; i < method.getBlock().size(); i++) {
             if (i == method.getBlock().size()-1){
                 lastLine = true;
             }
             Expression e = method.getBlock().get(i);
-            block += e.compile(method, aClass, cclass, lastLine, table, cSelectors);
+            compiled = e.compile(method, aClass, cclass, lastLine);
+            if (compiled.startsWith("PTR_TO_METHOD")){
+                check = CodeHelper.generateChecker(compiled, (Send) e);
+            }
+            block += check+compiled;
             block += "; \n";
         }
 
         return Environment.getEnv()+" \n "+modifyLastLine(block);
     }
 
+
+    /*
+    * genera los chequeos para ver si un método está implementado
+    * */
+    public static String generateChecker(String assignment, Send send) {
+        String msj = send.getID() + "/" +send.getArguments().size();
+        String met = assignment.substring(14);
+        met = met.substring(0, met.indexOf(']')+1);
+        String ret = "if ("+met+" == NULL) {\n" +
+                "   fprintf(stderr,\"El objeto no acepta el mensaje ’"+msj+"’.\\n\");\n" +
+                "   exit(1);\n" +
+                "}\n";
+        return ret;
+    }
+
+
+    /*
+    * Hack para agregar return en la última línea-
+    * */
     private static String modifyLastLine(String block) {
         String[] split = block.split("\n");
         split[split.length-1] = "return " +split[split.length-1];
@@ -224,5 +256,17 @@ public class CodeHelper {
                 "   return obj;\n" +
                 "} ";
         return constructor;
+    }
+
+    public static String executeMain(Program program) {
+        String ret = "";
+        Class main = program.getMain();
+        String cmain = Collector.getCClassName(Compiler.cClasses, "Main");
+        String selector = Collector.getSelectorIdByMessage("main", 0, Compiler.cSelectors);
+        int nbr = Integer.parseInt(selector.substring(3));
+
+        ret += "    PTR_TO_METHOD(constructor_"+cmain+"()->clase->metodos["+nbr+"])("+cmain+"); \n";
+
+        return ret;
     }
 }

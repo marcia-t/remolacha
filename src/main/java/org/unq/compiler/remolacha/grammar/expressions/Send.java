@@ -6,6 +6,7 @@ import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
 import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
+import org.unq.compiler.remolacha.compiler.Compiler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,20 +72,27 @@ public class Send extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
         String ret = "";
         String args ="";
-        String receiver = this.getExpr().compile(method,aClass,cclass,false,table,cSelectors);
+        String tmp = "";
+        String receiver = this.getExpr().compile(method,aClass,cclass,false);
 
-        String tmp = Environment.assignAndReturn(receiver);
+        if (this.getExpr() instanceof Send){
+            tmp = Environment.assignAndReturnWCheck(receiver, (Send) this.getExpr());
+        }
+        else {
+            tmp = Environment.assignAndReturn(receiver);
+        }
+
 
         for (Expression e : this.getArguments()) {
-            String arg =e.compile(method,aClass,cclass,false,table,cSelectors);
+            String arg =e.compile(method,aClass,cclass,false);
             String t = Environment.assignAndReturn(arg);
             args+=", "+t;
         }
 
-        String selector = Collector.getSelectorIdByMessage(this.getID(), this.getArguments().size(), cSelectors);
+        String selector = Collector.getSelectorIdByMessage(this.getID(), this.getArguments().size(), Compiler.cSelectors);
         int nbr = Integer.parseInt(selector.substring(3));
 
         /*if (!lastLine){
@@ -92,6 +100,7 @@ public class Send extends Expression {
             String assign = "Objeto* "+t1+"= ";
             ret = assign+ret;
         }*/
+
         ret += "PTR_TO_METHOD("+tmp+"->clase->metodos["+nbr+"])("+tmp+args+")";
         return ret;
     }

@@ -42,19 +42,23 @@ public class Set extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
         String ret = "";
 
-        String assign = this.getExpr().compile(method, aClass, cclass, false, table, cSelectors);
+        String assign = this.getExpr().compile(method, aClass, cclass, false);
+
+        //String tmp ="";
 
         for (int i = 0; i < aClass.getLocals().size(); i++) {
             if (aClass.getLocals().get(i).getId().equals(this.getID())) {
-                ret += "o0->varsInstancia[" + i + "] =";
+                //tmp = Environment.assignAndReturn("o0->varsInstancia[" + i + "]");
+                ret += "o0->varsInstancia[" + i + "] = ";
             }
         }
         for (int i = 0; i < method.getParameters().size(); i++) {
             if (this.getID().equals(method.getParameters().get(i))) {
-                ret += "o" + i+1 + " =";
+                //tmp = Environment.assignAndReturn("o" + i+1);
+                ret += "o" + i+1 + " = ";
             }
         }
 

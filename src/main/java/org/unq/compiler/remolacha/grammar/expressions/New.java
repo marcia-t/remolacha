@@ -33,12 +33,8 @@ public class New extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
         return "constructor_"+cclass+"()";
     }
 
-    /*@Override
-    public String getTemps(Method method, Class aClass, String cclass, int i) {
-        return "";
-    }*/
 }

@@ -19,4 +19,18 @@ public class Program {
     public void setClasses(List<Class> classes) {
         this.classes = classes;
     }
+
+    /*
+    * Devuelve la clase main.
+    * Siempre funciona ya que está chequeado antes de compilar.
+    * */
+    public Class getMain(){
+        for (Class c :
+                classes) {
+            if (c.getId().equals("Main")){
+                return c;
+            }
+        }
+        return null;
+    }
 }

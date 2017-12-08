@@ -19,12 +19,9 @@ public class Self extends Expression {
     }
 
     @Override
-    public String compile(Method method, Class aClass, String cclass, Boolean lastLine, HashMap<String, String[]> table, List<CSelector> cSelectors) {
+    public String compile(Method method, Class aClass, String cclass, Boolean lastLine) {
         return "o0";
     }
 
-    /*@Override
-    public String getTemps(Method method, Class aClass, String cclass, int i) {
-        return "";
-    }*/
+
 }

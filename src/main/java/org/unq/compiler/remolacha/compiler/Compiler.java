@@ -17,9 +17,9 @@ public class Compiler {
     private Program program;
     private Checker checker = new Checker();
 
-    private List<CClass> cClasses = new ArrayList<>();
-    private List<CSelector> cSelectors = new ArrayList<>();
-    private HashMap<String, String[]> table = new HashMap<>();
+    public static List<CClass> cClasses = new ArrayList<>();
+    public static List<CSelector> cSelectors = new ArrayList<>();
+    public static HashMap<String, String[]> table = new HashMap<>();
 
 
     public Compiler(Program program) {
@@ -53,7 +53,9 @@ public class Compiler {
     }
 
 
-
+    /*
+    * Compila todo el programa.
+    * */
     public void compile(){
         String code = "";
         code+= CodeHelper.getHeader();
@@ -71,6 +73,9 @@ public class Compiler {
         System.out.println(code);
     }
 
+    /*
+    * Compila el método que inicializará todas las clases
+    * */
     private String compileInitialization() {
         int methodsSize = this.cSelectors.size();
         String ret ="int main () {\n";
@@ -78,6 +83,7 @@ public class Compiler {
         for (String c : table.keySet()) {
             ret+=CodeHelper.getInitialization(table.get(c), c, methodsSize);
         }
+        ret += CodeHelper.executeMain(program);
         ret += "    return 0;\n";
         ret += "}\n";
         return ret;
@@ -85,8 +91,6 @@ public class Compiler {
 
     /*
     * Compila los métodos de cada clase
-    * TODO: ver si compilar o no los métodos de main
-    * Se van a compilar los métodos ya que después se llamarán desde el Main de C++
     * */
     private String compileMethods() {
         String methods = "";
