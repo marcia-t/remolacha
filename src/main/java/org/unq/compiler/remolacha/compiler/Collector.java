@@ -1,6 +1,5 @@
 package org.unq.compiler.remolacha.compiler;
 
-import com.sun.org.apache.bcel.internal.classfile.Code;
 import org.unq.compiler.remolacha.compiler.utils.CClass;
 import org.unq.compiler.remolacha.compiler.utils.CSelector;
 import org.unq.compiler.remolacha.grammar.Class;
@@ -8,7 +7,6 @@ import org.unq.compiler.remolacha.grammar.Expression;
 import org.unq.compiler.remolacha.grammar.Method;
 import org.unq.compiler.remolacha.grammar.Program;
 
-import java.lang.Compiler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

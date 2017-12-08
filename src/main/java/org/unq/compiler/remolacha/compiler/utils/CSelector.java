@@ -23,16 +23,8 @@ public class CSelector {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getArgs() {
         return args;
-    }
-
-    public void setArgs(int args) {
-        this.args = args;
     }
 
 

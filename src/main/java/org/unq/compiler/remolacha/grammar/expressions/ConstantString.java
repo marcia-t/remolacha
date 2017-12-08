@@ -37,8 +37,5 @@ public class ConstantString extends Expression{
         return  "constructor_cls1(\""+this.getSTRING()+"\")";
     }
 
-    /*@Override
-    public String getTemps(Method method, Class aClass, String cclass, int i) {
-        return "";
-    }*/
+
 }

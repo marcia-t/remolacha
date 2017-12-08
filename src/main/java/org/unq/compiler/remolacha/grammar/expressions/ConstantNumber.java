@@ -37,8 +37,4 @@ public class ConstantNumber extends Expression {
        return "constructor_cls0("+this.getNUM()+")";
     }
 
-    /*@Override
-    public String getTemps(Method method, Class aClass, String cclass, int i) {
-        return "";
-    }*/
 }

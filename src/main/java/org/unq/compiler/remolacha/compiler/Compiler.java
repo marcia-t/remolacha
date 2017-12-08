@@ -66,11 +66,11 @@ public class Compiler {
             code += this.compileClassesContructors();
             code += this.compileMethods();
             code += this.compileInitialization();
+            System.out.println(code);
         }
         else {
             System.out.println("Falló la compilación");
         }
-        System.out.println(code);
     }
 
     /*
@@ -83,7 +83,7 @@ public class Compiler {
         for (String c : table.keySet()) {
             ret+=CodeHelper.getInitialization(table.get(c), c, methodsSize);
         }
-        ret += CodeHelper.executeMain(program);
+        ret += CodeHelper.executeMain();
         ret += "    return 0;\n";
         ret += "}\n";
         return ret;

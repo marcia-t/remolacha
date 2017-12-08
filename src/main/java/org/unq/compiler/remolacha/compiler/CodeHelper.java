@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by mtejeda on 14/11/17.
+ * Clase que va a generar la mayor cantidad de código del compilador
  */
 public class CodeHelper {
 
@@ -88,7 +89,7 @@ public class CodeHelper {
         declaration+= CodeHelper.getMethodDeclaration(m, cclass, cSelectors);
         declaration+= CodeHelper.getParameters(m.getParameters());
         declaration += "{\n";
-        declaration += CodeHelper.compileExpressions(aClass, m, cclass, table, cSelectors);
+        declaration += CodeHelper.compileExpressions(aClass, m, cclass);
         declaration += "}\n";
         return declaration;
     }
@@ -96,7 +97,7 @@ public class CodeHelper {
     /*
     * Compilar todas las expresiones de un bloque
     * */
-    private static String compileExpressions(Class aClass, Method method, String cclass, HashMap<String, String[]> table, List<CSelector> cSelectors) {
+    private static String compileExpressions(Class aClass, Method method, String cclass) {
         String block = "";
         Boolean lastLine = false;
         String compiled = "";
@@ -113,7 +114,6 @@ public class CodeHelper {
             block += check+compiled;
             block += "; \n";
         }
-
         return Environment.getEnv()+" \n "+modifyLastLine(block);
     }
 
@@ -147,6 +147,7 @@ public class CodeHelper {
     }
 
 
+    /*Método que calcula los parámetros de un método*/
     private static String getParameters(List<String> parameters) {
         String param = "(Objeto* o0";
         int counter = 1;
@@ -158,12 +159,17 @@ public class CodeHelper {
         return param;
     }
 
+    /*Método que genera la declaración de un método*/
     private static String getMethodDeclaration(Method m, String cclass, List<CSelector> cSelectors) {
         String selectorId = Collector.getSelectorId(m, cSelectors);
 
         return "Objeto* met_"+cclass+"_"+selectorId;
     }
 
+
+    /*
+    * Método que inicializa las clases y sus punteros en el prgrama principal
+    * */
     public static String getInitialization(String[] strings, String c, int methodsSize) {
         String ret = "    "+c +" = new Clase;\n";
         String size = String.valueOf(Integer.valueOf(methodsSize));
@@ -179,6 +185,9 @@ public class CodeHelper {
         return ret;
     }
 
+    /*
+    * Inicialización de las clases nativas
+    * */
     public static String getNativeInitializations(int methodsSize) {
         String ret = "    /* Inicialización de la clase cls0 ( Int ) */\n" +
                 "    cls0 = new Clase;\n" +
@@ -200,6 +209,9 @@ public class CodeHelper {
         return ret;
     }
 
+    /*
+    * Definición de las clases nativas
+    * */
     public static String getNativeClassesDef (){
         return "/* Construye un objeto de clase Int */\n" +
                 "Objeto* constructor_cls0 (Num valor) {\n" +
@@ -243,6 +255,9 @@ public class CodeHelper {
                 "}\n";
     }
 
+    /*
+    * Genera la construcción de una clase
+    * */
     public static String getClassConstructor(Class cl, String id) {
         String varsInstancia = "";
         for (int i = 0; i < cl.localsSize(); i++) {
@@ -258,9 +273,11 @@ public class CodeHelper {
         return constructor;
     }
 
-    public static String executeMain(Program program) {
+    /*
+    * Genera el código para ejcutra el método main de la clase Main
+    * */
+    public static String executeMain() {
         String ret = "";
-        Class main = program.getMain();
         String cmain = Collector.getCClassName(Compiler.cClasses, "Main");
         String selector = Collector.getSelectorIdByMessage("main", 0, Compiler.cSelectors);
         int nbr = Integer.parseInt(selector.substring(3));

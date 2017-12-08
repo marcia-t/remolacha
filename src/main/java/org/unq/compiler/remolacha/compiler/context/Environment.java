@@ -1,11 +1,8 @@
 package org.unq.compiler.remolacha.compiler.context;
 
-import org.unq.compiler.remolacha.compiler.Collector;
-import org.unq.compiler.remolacha.compiler.Compiler;
 import org.unq.compiler.remolacha.grammar.expressions.Send;
 
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 /*
 * Clase que va a manejar el entorno de los objetos
@@ -40,6 +37,9 @@ public class Environment {
     }
 
 
+    /*
+    * Guarda una asignación a una variable temporal en el entorno actual de ejecución
+    * */
     public static String assignAndReturn(String assignment){
         if (assignments.containsKey(assignment)){
             return assignments.get(assignment);
@@ -65,6 +65,11 @@ public class Environment {
         env += ret;
     }
 
+    /*
+    * Guarda una asignación a una variable temporal en el entorno actual de ejecución
+    * En el caso de que sea la asignación de un send, se agrega aademás el chequeo
+    * para saber si el método está definico en la case.
+    * */
     public static String assignAndReturnWCheck(String assignment, Send expr) {
         if (assignments.containsKey(assignment)){
             return assignments.get(assignment);

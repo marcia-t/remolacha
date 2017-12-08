@@ -95,11 +95,7 @@ public class Send extends Expression {
         String selector = Collector.getSelectorIdByMessage(this.getID(), this.getArguments().size(), Compiler.cSelectors);
         int nbr = Integer.parseInt(selector.substring(3));
 
-        /*if (!lastLine){
-            String t1 = Environment.getNext();
-            String assign = "Objeto* "+t1+"= ";
-            ret = assign+ret;
-        }*/
+
 
         ret += "PTR_TO_METHOD("+tmp+"->clase->metodos["+nbr+"])("+tmp+args+")";
         return ret;

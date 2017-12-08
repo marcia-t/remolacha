@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Created by mtejeda on 14/11/17.
+ * Clase que realizará todos los chequeos del programa antes de compilarlo
  */
 public class Checker {
 
