@@ -37,8 +37,4 @@ public class New extends Expression {
         return "constructor_"+cclass+"()";
     }
 
-    /*@Override
-    public String getTemps(Method method, Class aClass, String cclass, int i) {
-        return "";
-    }*/
 }
